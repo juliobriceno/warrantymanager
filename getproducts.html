@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://ptreesys.mx/sharedfiles/src/sweetalert.css">
+    <script src="https://ptreesys.mx/sharedfiles/src/sweetalert.min.js"></script>
+
+    <link rel="stylesheet" href="https://mbenford.github.io/ngTagsInput/css/ng-tags-input.min.css" />
+    <script src="https://mbenford.github.io/ngTagsInput/js/ng-tags-input.min.js"></script>
+
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+    
+    <title>Buscar productos</title>
+
+</head>
+<body>
+
+    <div ng-controller="MyController4">
+
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Mercado Libre II</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Inicio</a></li>
+                    <li><a href="/getSession">Ofrece tus productos</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div dw-loading="myloading" dw-loading-options="{text: 'Procesando...'}">
+
+        <div class='container-fluid typeahead-demo'>
+            <input type="text" placeholder="Escriba el producto que busca" ng-model="txtFind" uib-typeahead="txtproduct as txtproduct._id for txtproduct in txtProducts  | orderBy:'-count' | filter:$viewValue | limitTo:8" class="form-control">
+        </div>
+
+        <button ng-click="GetProducts();" type="button">Buscar</button> </br>
+
+        <label>Ubicacion</label>
+        <tags-input display-property="State" min-length="1" ng-model="States" add-on-paste="true" placeholder="Ubicacion (Estado) del producto"  on-tag-added="tagAdded($tag)" on-tag-removed="tagAdded($tag)">
+            <auto-complete display-property="State" min-length="1" source="loadStates($query)"></auto-complete>
+        </tags-input>
+
+        <label>Marca</label>
+        <tags-input display-property="Marca" min-length="1" ng-model="Makes" add-on-paste="true" placeholder="Marca del producto" on-tag-added="tagAdded($tag)" on-tag-removed="tagAdded($tag)">
+            <auto-complete display-property="Marca" min-length="1" source="loadMakes($query)"></auto-complete>
+        </tags-input>
+
+        <label>Modelo</label>
+        <tags-input display-property="Modelo" min-length="1" ng-model="Models" add-on-paste="true" placeholder="Modelo del producto"  on-tag-added="tagAdded($tag)" on-tag-removed="tagAdded($tag)">
+            <auto-complete display-property="Modelo" min-length="1" source="loadModels($query)"></auto-complete>
+        </tags-input>
+
+        <input ng-model="chkNew" ng-click="FilterProduct();" type="checkbox"> Nuevo<br>
+        <input ng-model="chkUsed" ng-click="FilterProduct();" type="checkbox"> Usado<br>
+
+        <label>Orden</label>
+        <tags-input ng-model="Orders" min-length="1" add-on-paste="true" placeholder="Orden de la búsqueda" on-tag-added="tagAdded($tag)" on-tag-removed="tagAdded($tag)">
+            <auto-complete source="loadOrders($query)" load-on-down-arrow="true"></auto-complete>
+        </tags-input>
+
+        <div class="well well-lg">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Empresa</th>
+                            <th>Estado</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Estado</th>
+                            <th>Serial</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="Product in Products">
+                            <td>{{Product.Enterprise}}</td>
+                            <td>{{Product.State}}</td>
+                            <td>{{Product.Descripcion}}</td>
+                            <td>{{Product.Precio}}</td>
+                            <td>{{Product.Cantidad}}</td>
+                            <td>{{Product.Serial}}</td>
+                            <td>{{Product.Estado}}</td>
+                            <td>{{Product.Marca}}</td>
+                            <td>{{Product.Modelo}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        </div>
+    </div>
+
+    <script src="js/controller.js"></script>
+    <script src="js/angular-file-upload.min.js"></script>
+    <script src="js/spin.min.js"></script>
+    <script src="js/angular-loading.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/angular-loading.css" />
+    <link rel="stylesheet" type="text/css" href="css/autocomplete.css" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/upload_style.css">
+</body>
+</html>

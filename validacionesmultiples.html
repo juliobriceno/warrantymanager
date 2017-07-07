@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html ng-app="AppFS">
+<head>
+    <meta charset="utf-8" />
+    <title>Fill Combo City</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/1.2.1/lodash.min.js"></script>
+</head>
+<body ng-controller="MainCtrlFS">
+    <label for="pass" class="label">Cities</label>
+    <select class="form-control"
+            ng-model="selectedCity"
+            ng-options="City as City.name for City in Cities">
+    </select>
+</body>
+</html>
+
+<script>
+    var app = angular.module('AppFS', []);
+    app.controller('MainCtrlFS', function ($scope, $http) {
+        $scope.Cities = [{ name: 'Chicago' }, { name: 'Cincinatti' }, { name: 'Miami' }]
+    });
+</script>
