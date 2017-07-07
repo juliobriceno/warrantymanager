@@ -1,0 +1,149 @@
+@import url(https://fonts.googleapis.com/css?family=Lato);
+
+#contenido {
+    padding-left: 0;    
+}
+
+
+@media(min-width:768px) {
+    body {
+        margin-top: 50px;
+    }
+   
+}
+
+
+@media(min-width:768px) {
+    #contenido {
+        padding-left: 225px;
+    }
+  
+}
+
+
+/*Menu Navegacion*/
+
+@media(min-width:768px) {
+    .side-menu {
+        border: none;
+        border-radius: 0;
+        border-top: 1px rgba(0,0,0,.5) solid;
+        overflow-y: auto;
+        background-color: #222;
+        top: 50px ;
+        left: -1px;
+        bottom: 0;
+        overflow-x: hidden;
+        padding-bottom: 40px;
+        position: fixed;
+       width: 225px;
+    }
+
+    .side-menu>li>a {
+        width: 225px;
+        border-bottom: 1px rgba(0,0,0,.3) solid;
+        color: #9d9d9d;
+    }
+
+    .side-menu li a:hover,
+    .side-menu li a:focus {
+        outline: none;
+        background-color: #337ab7 !important;
+        color:#fff;
+    }
+}
+
+.side-menu>li>ul {
+    padding: 0;
+    border-bottom: 1px rgba(0,0,0,.3) solid;
+}
+
+.side-menu>li>ul>li>a {
+    display: block;
+    padding: 10px 15px 10px 38px;
+    text-decoration: none;
+    color: #9d9d9d;    
+}
+
+.side-menu>li>ul>li>a:hover {
+    color: #fff;
+}
+
+.navbar .nav > li > a > .label {
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  position: absolute;
+  top: 14px;
+  right: 6px;
+  font-size: 10px;
+  font-weight: normal;
+  min-width: 15px;
+  min-height: 15px;
+  line-height: 1.0em;
+  text-align: center;
+  padding: 2px;
+}
+
+.navbar .nav > li > a:hover > .label {
+  top: 10px;
+}
+
+.navbar-brand {
+    padding: 5px 15px;
+}
+
+.nav-tabs > li > a {
+     border-radius: 0 !important;
+}
+
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: none !important;
+    border-bottom-color: transparent;
+}
+
+.form-register{
+        left: 5%;
+        margin-top: 2%;
+        width: 50%;
+
+}
+
+.form-register2{
+        margin-left: -1%;
+        margin-top: 2%;
+        width: 50%;
+
+}
+
+.margen-col1{
+    width: 90%;
+    margin-top:3% !important;
+    margin-left:5% !important;
+
+}
+.margen-col2{
+    margin-top:20%;
+}
+
+.margen-colup{
+   margin-top:10%; 
+   margin-left: 2%"
+}
+
+
+/*.side-menu li a:focus {
+    outline: none;
+    background-color: #1a242f !important;
+}
+
+
+.side-menu li a:hover, .side-menu li a:focus {
+    outline: none;
+    background-color: #337ab7 !important;
+    color:#fff;
+}*/
