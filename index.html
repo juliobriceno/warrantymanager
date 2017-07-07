@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-  <html lang="en">
+<html lang="en" ng-app="demo">
 
   <head>
     <meta charset="UTF-8"/>
@@ -8,14 +8,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="css/bootstrap.min.css"/><!--enlace bootstrap -->
     <script src="js/jquery.js"></script> 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"> <!-- enlace con fuentes font-awosome-->
+	
+	<!-- Librerías para controles especiales (Temporal) -->
+    <script src="js/angular.js"></script>
+    <script src="js/angular-animate.js"></script>
+    <script src="js/angular-sanitize.js"></script>
+    <script src="js/ui-bootstrap-tpls-2.5.0.js"></script>
+    <script src="js/example.js"></script>
+    <!-- ui-select files -->
+    <script src="./select.js"></script>
+    <link rel="stylesheet" href="./select.css">
+    <script src="./demo.js"></script>
+	<!-- FIN Librerías para controles especiales (Temporal) -->
+	
+	<!-- Librerías Select con buscador -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
+	<!-- FIN Librerías Select con buscador -->
+	
+
+	</head>
 
 
-
-
-    <body>
-      
+	<body class="ng-cloak" ng-controller="DemoCtrl as ctrl">
+	
       <div id="contenido">
         <!-- Navigation -->
 
@@ -88,11 +106,11 @@
               <h1>TAB1</h1>
             </div>
 
-            <div class="tab-pane active" id="my-register">
+            <div class="tab-pane" id="my-register">
               <div class="container-fluid">
               <div class="row margen-col1" >
                 <div>
-                  <legend><i class="fa fa-cog"></i> Change your Settings</legend>
+                  <legend><i class="fa fa-cog"></i> Update your account</legend>
                   
                   <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-line">
                     <div class="form-group">
@@ -117,12 +135,16 @@
                     </div>
                     <div class="form-group">
                       <label for="country"> Country:</label>
-                      <select name="country" class="form-control"> 
-                        <option value="">Venezuela</option>
-                      </select>
+					  <ui-select ng-model="ctrl.country.selected" theme="selectize" ng-disabled="ctrl.disabled" title="Choose a country">
+						<ui-select-match placeholder="Select or search a country in the list...">{{$select.selected.name}}</ui-select-match>
+						<ui-select-choices repeat="country in ctrl.countries | filter: $select.search">
+						  <span ng-bind-html="country.name | highlight: $select.search"></span>
+						  <small ng-bind-html="country.code | highlight: $select.search"></small>
+						</ui-select-choices>
+					  </ui-select>
                     </div>
                     <hr>
-                    <button type="button" class="btn btn-primary submit pull-right"><i class="fa fa-paper-plane" aria-hidden="true"></i> Save Changes</button>
+                    <button type="button" class="btn btn-primary submit pull-right"><i class="fa fa-paper-plane" aria-hidden="true"></i> Save</button>
                   </div><!-- fin form-->
 
 
@@ -133,9 +155,9 @@
                     <div class="text-center margen-col2" >
 
                       <span class="glyphicon glyphicon-pencil" style="font-size: 5em;"></span>
-                      <h4>Change your Settings</h4>
-                      <p class="text-center">Cambia tus datos y mantenlos actualizados en tdo momento.</p>
-                      <p class="text-center">Cambia tus datos y</p>
+                      <h4>Update your account</h4>
+                      <p class="text-center">Set new values and press save.</p>
+                      <p class="text-center"></p>
                     </div>
 
 
@@ -154,10 +176,10 @@
             </div>
 
 
-            <div class="tab-pane" id="register-device">
+            <div class="tab-pane active" id="register-device">
               <div class="container-fluid">
                 <div class="row margen-col1"  >
-                  <legend><i class="fa fa-cog"></i> Device Details</legend>
+                  <legend><i class="fa fa-cog"></i> New Device Register</legend>
                   <div class="row">
                     <div>
                       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-line">
@@ -174,23 +196,36 @@
                           <input type="email" class="form-control" id="model" placeholder=" Enter Model">
                         </div>  
                         <div class="form-group">
-                          <label for="date">Date Of Purchase:</label>
-                          <input type="tel" class="form-control" id="date" placeholder=" dd/mm/yyyy">
+							<label for="date">Date Of Purchase:</label>
+							<p class="input-group">
+							  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+							  <span class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+							  </span>
+							</p>
                         </div>
                         <div class="form-group">
                           <label for="category">Product Category:</label>
-                          <select name="category" class="form-control"> 
-                            <option value="">Venezuela</option>
-                          </select>
+						  <ui-select ng-model="ctrl.country.selected" theme="selectize" ng-disabled="ctrl.disabled" title="Choose a category">
+							<ui-select-match placeholder="Select or search a category in the list...">{{$select.selected.name}}</ui-select-match>
+							<ui-select-choices repeat="country in ctrl.countries | filter: $select.search">
+							  <span ng-bind-html="country.name | highlight: $select.search"></span>
+							  <small ng-bind-html="country.code | highlight: $select.search"></small>
+							</ui-select-choices>
+						  </ui-select>
                         </div>
                         <div class="form-group">
                           <label for="subcategory">Product Sub-Category:</label>
-                          <select name="country" class="form-control"> 
-                            <option value="">Venezuela</option>
-                          </select>
+						  <ui-select ng-model="ctrl.country.selected" theme="selectize" ng-disabled="ctrl.disabled" title="Choose a subcategory">
+							<ui-select-match placeholder="Select or search a subcategory in the list...">{{$select.selected.name}}</ui-select-match>
+							<ui-select-choices repeat="country in ctrl.countries | filter: $select.search">
+							  <span ng-bind-html="country.name | highlight: $select.search"></span>
+							  <small ng-bind-html="country.code | highlight: $select.search"></small>
+							</ui-select-choices>
+						  </ui-select>
                         </div>
                         <div class="form-group">
-                          <label for="vendedor">Vendedor:</label>
+                          <label for="vendedor">Vendor:</label>
                           <input type="tel" class="form-control" id="vendedor" placeholder="Enter Vendedor">
                         </div>
                         <hr>
@@ -205,7 +240,7 @@
 
                       <div class="row margen-colup" >
                         <div class="col-md-12">
-                          <p >Upload Picture</p>
+                          <p >Fill product data, upload files (picture, pdf files, etc) and press save</p>
                           <a href="#" class="btn btn-default btn-sm "><i class="fa fa-cloud-upload fa-3x"></i> Upload File</a>
                         </div>
 
