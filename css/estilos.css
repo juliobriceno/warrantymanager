@@ -1,5 +1,18 @@
 @import url(https://fonts.googleapis.com/css?family=Lato);
 
+.background-login {
+    background: url("../imagenes/smartwatch-828786_1920.jpg");
+    background-attachment:fixed;
+    background-size:cover;
+    min-height:400px; 
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.90;
+    background-color: grey;
+}
+
 #contenido {
     padding-left: 0;    
 }
@@ -132,18 +145,39 @@
 
 .margen-colup{
    margin-top:10%; 
-   margin-left: 2%"
+   margin-left: 2%;
+}
+
+.form-login{
+  margin-left: -8%;
+  margin-top: 5%;
+  
+ 
+}
+
+.container-login{
+
+    background-color: #F7F7F7;
+
+    /* just in case there no content*/
+    padding: 20px 25px 30px;
+    margin: 0 auto 25px;
+    margin-top: 50px;
+    /* shadows and rounded borders */
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
 
-/*.side-menu li a:focus {
-    outline: none;
-    background-color: #1a242f !important;
-}
+.social-facebook {background: #3b5998 !important;}
+.social-twitter {background: #00aced !important; border-color:#00aced !important; }
 
+.social-google {background: #c32f10 !important; border-color: #c32f10 !important;}
 
-.side-menu li a:hover, .side-menu li a:focus {
-    outline: none;
-    background-color: #337ab7 !important;
-    color:#fff;
-}*/
+.text-login {color:#FFF;text-shadow: -5px -5px 5px #aaa;}
+
+.text-password{margin-top: 2%;}
