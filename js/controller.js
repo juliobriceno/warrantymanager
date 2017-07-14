@@ -528,6 +528,8 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         // Controlador de la ventana de modal de mensajes
         .controller('MessagesModalCtrl', function ($uibModalInstance, MessagesModalInterface) {
             var $ctrl = this;
+            $ctrl.bodyMessage = 'Device saved';
+            $ctrl.bodyTitle = 'Greate!';
             $ctrl.ok = function () {
                 $uibModalInstance.close();
             };
