@@ -80,7 +80,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     $loading.finish('myloading');
                     if (response.data.Result == 'ok') {
                         $scope.uploader.uploadAll();
-                        alert('Dispositivo Guardado');
+                        $scope.open();
                     }
                     else if (response.data.Result == 'userExist') {
                         window.location.href = '/home.html';
@@ -115,7 +115,6 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.uploader = new FileUploader();
             $scope.uploader.url = "/api/uploadFile";
             $scope.uploader.onSuccessItem = function (item, response) {
-                alert('Subió el file');
             }
             $scope.FillModels = function () {
                 // Lista de modelos (Fijos por traer de base de datos)

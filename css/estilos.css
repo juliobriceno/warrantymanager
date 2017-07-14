@@ -17,6 +17,14 @@
     padding-left: 0;    
 }
 
+.file-input > input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 200px;
+    opacity: 0;
+    cursor: pointer;
+}
 
 @media(min-width:768px) {
     body {
