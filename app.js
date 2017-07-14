@@ -10,6 +10,8 @@ var MyMongo = require('./js/mymongo.js');
 var fileUpload = require('express-fileupload');
 var MyMail = require('./js/mails.js');
 
+const fs = require('fs');
+
 app.use(function (req, res, next) {
     var str = req.url;
     var patt = new RegExp(".git");
@@ -64,6 +66,44 @@ app.post('/getSession', function (req, res) {
         Data.Email = 'nc';
     }
     res.end(JSON.stringify(Data));
+});
+
+app.post('/api/NewUserRegister', function (req, res) {
+    MyMongo.Find('Users', { strEmail: req.body.user.strEmail }, function (result) {
+        var Data = {};
+        if (result.length > 0) {
+            Data.Result == 'userExist'
+        }
+        else {
+            MyMongo.Insert('Users', req.body.user, function (result) {
+                if (result == 'Ok') {
+                    Data.Result = 'ok';
+                    req.body.user.strPassword = 'xxxxxxxxxxxxxxxxx';
+                    req.session.user = req.body.user;
+                    res.end(JSON.stringify(Data))
+                };
+            });
+        }
+    });
+});
+
+app.post('/api/NewDeviceRegister', function (req, res) {
+    var Data = {};
+    MyMongo.Insert('Devices', req.body.device, function (result) {
+        if (result == 'Ok') {
+            Data.Result = 'ok';
+            res.end(JSON.stringify(Data))
+        };
+    });
+});
+
+app.post('/api/uploadFile', function (req, res) {
+    var sampleFile;
+    sampleFile = req.files.file;
+    var newPath = __dirname + "/uploads/" + sampleFile.name;
+    fs.writeFile(newPath, sampleFile.data, function (err) {
+        console.log('Guardado file');
+    });
 });
 
 app.post('/Login', function (req, res) {
