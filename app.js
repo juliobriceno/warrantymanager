@@ -102,6 +102,7 @@ app.post('/api/uploadFile', function (req, res) {
     sampleFile = req.files.file;
     var newPath = __dirname + "/uploads/" + sampleFile.name;
     fs.writeFile(newPath, sampleFile.data, function (err) {
+        console.log(err);
         console.log('Guardado file');
     });
 });
