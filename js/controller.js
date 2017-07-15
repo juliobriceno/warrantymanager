@@ -228,12 +228,66 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.user.strLastName = '';
             $scope.user.strEmail = '';
             $scope.user.strPassword = '';
+            $scope.user.strConfirmPassword = '';
             $scope.user.strPhoneNumber = '';
             $scope.userLogon = {};
             $scope.userLogon.strEmail = '';
             $scope.userLogon.strPassword = '';
+            $scope.strFirstNameClass = 'form-group';
+            $scope.strLastNameClass = 'form-group';
+            $scope.strEmailClass = 'form-group';
+            $scope.strPasswordClass = 'form-group';
+            $scope.strConfirmPasswordClass = 'form-group';
+            $scope.strPhoneClass = 'form-group';
+            $scope.strCountryClass = 'form-group';
+            $scope.strEmailLogonClass = 'form-group';
+            $scope.strPasswordLogonClass = 'form-group';
             // Crear nuevo usuario
             $scope.NewUserRegister = function () {
+                var booError = false;
+                if ($scope.user.strFirstName.trim() == '') {
+                    $scope.strFirstNameClass = 'form-group has-error has-feedback'
+                    booError = true;
+                }
+                else {
+                    $scope.strFirstNameClass = 'form-group'
+                }
+                if ($scope.user.strLastName.trim() == '') {
+                    $scope.strLastNameClass = 'form-group has-error has-feedback'
+                    booError = true;
+                }
+                else {
+                    $scope.strLastNameClass = 'form-group'
+                }
+                if (!$scope.ValidateEmail($scope.user.strEmail.trim())) {
+                    $scope.strEmailClass = 'form-group has-error has-feedback'
+                    booError = true;
+                }
+                else {
+                    $scope.strEmailClass = 'form-group'
+                }
+                if ($scope.user.strPassword.trim() == '' || $scope.user.strPassword.trim() != $scope.user.strConfirmPassword.trim()) {
+                    $scope.strPasswordClass = 'form-group has-error has-feedback'
+                    booError = true;
+                }
+                else {
+                    $scope.strPasswordClass = 'form-group'
+                }
+                if ($scope.user.strPhoneNumber.trim() == '') {
+                    $scope.strPhoneNumberClass = 'form-group has-error has-feedback'
+                    booError = true;
+                }
+                else {
+                    $scope.strPhoneNumberClass = 'form-group'
+                }
+                if (typeof $scope.country.selected.name == 'undefined') {
+                    $scope.strCountryClass = 'form-group has-error has-feedback'
+                    booError = true;
+                }
+                else {
+                    $scope.strCountryClass = 'form-group'
+                }
+                if (booError == true) { return 0; }
                 var Data = {};
                 Data.user = $scope.user;
                 Data.user.strCountry = $scope.country.selected.name;
@@ -246,18 +300,32 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 }).then(function successCallback(response) {
                     $loading.finish('myloading');
                     if (response.data.Result == 'ok') {
-                        alert('Vale');
                         window.location.href = '/home.html';
                     }
                     else if (response.data.Result == 'userExist') {
-                        window.location.href = '/home.html';
+                        alert('Éste usuario existe pana');
                     }
                 }, function errorCallback(response) {
                     alert(response.statusText);
                 });
             }
             $scope.Logon = function () {
-                $loading.start('myloading');
+                var booError = false;
+                if ($scope.userLogon.strEmail.trim() == '') {
+                    $scope.strEmailLogonClass = 'form-group has-error has-feedback'
+                    booError = true;
+                }
+                else {
+                    $scope.strEmailLogonClass = 'form-group'
+                }
+                if ($scope.userLogon.strPassword.trim() == '') {
+                    $scope.strPasswordLogonClass = 'form-group has-error has-feedback'
+                    booError = true;
+                }
+                else {
+                    $scope.strPasswordLogonClass = 'form-group'
+                }
+                if (booError == true) { return 0; }
                 var Data = {};
                 Data.userLogon = $scope.userLogon;
                 $loading.start('myloading');
@@ -272,7 +340,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                         window.location.href = '/home.html';
                     }
                     else if (response.data.Result == 'userDoesNotExist') {
-                        alert('User does not exist');
+                        $scope.open();
                     }
                 }, function errorCallback(response) {
                     alert(response.statusText);
@@ -301,6 +369,10 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     }
                 });
             };
+            $scope.ValidateEmail = function validateEmail(email) {
+                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(email);
+            }
             // Lista de países (Fijos)
             $scope.countries = [ // Taken from https://gist.github.com/unceus/6501985
             { id: 1, name: 'Afghanistan', code: 'AF' },

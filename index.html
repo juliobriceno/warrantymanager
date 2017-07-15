@@ -43,8 +43,6 @@
 
 </head>
 
-
-
 <body ng-controller="ctrlWarrantyLogin" class="background-login">
     <div dw-loading="myloading" dw-loading-options="{text: 'Working...'}" >
         <div class="container">
@@ -52,9 +50,9 @@
                 <div class="col-xs-12 col-sm-12 col-md-8">
                     <div class="text-center margen-col2 text-login">
                         <br>
-                        <h3>Register Your Warranty</h3>
-                        <p class="text-center">Cambia tus datos y mantenlos actualizados en tdo momento.</p>
-                        <p class="text-center">Cambia tus datos y</p>
+                        <h3>WAPPrranty</h3>
+                        <p class="text-center">Don´t Worry.....</p>
+                        <p class="text-center">All warranties in ONE cloud place... </p>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-4 well ">
@@ -67,15 +65,15 @@
                             <form id="tab">
                                 <br>
                                 <legend>Sign In</legend>
-                                <div class="form-group">
+                                <div ng-class="strEmailLogonClass" >
                                     <label for="email">Email Address:</label>
                                     <input ng-model="userLogon.strEmail" class="form-control" id="" placeholder="">
                                 </div>
-                                <div class="form-group">
+                                <div ng-class="strPasswordLogonClass" >
                                     <label for="password">Password:</label>
                                     <input ng-model="userLogon.strPassword" type="password" class="form-control" id="password" placeholder=" ">
                                 </div>
-                                <button class="btn btn-primary btn-block">Sign In</button>
+                                <button ng-click="Logon();" class="btn btn-primary btn-block">Sign In</button>
                                 <div class="text-password">
                                     <p>forgot your password? <a href="#">click here</a></p>
                                 </div>
@@ -95,41 +93,33 @@
                             <form id="tab2">
                                 <br>
                                 <legend>Sign Up</legend>
-
-                                <div class="form-group has-error has-feedback">
-                                    <label for="email">First name:</label> <a href="#" data-toggle="popover" title="Popover Header" data-content="Some content inside the popover"><span class="glyphicon glyphicon-question-sign" ></span></a>
+                                <div ng-class="strFirstNameClass">
+                                    <label for="email">First name:</label>
                                     <input ng-model="user.strFirstName" class="form-control" placeholder="">
-
-                                    
-
-                                   
                                 </div>
-
-
-
-                                <div class="form-group">
+                                <div ng-class="strLastNameClass">
                                     <label for="password">Last name:</label>
                                     <input ng-model="user.strLastName" class="form-control" placeholder=" ">
                                 </div>
-                                <div class="form-group">
+                                <div ng-class="strEmailClass">
                                     <label for="password">Email Address:</label>
                                     <input ng-model="user.strEmail" class="form-control" placeholder=" ">
                                 </div>
-                                <div class="form-group">
+                                <div ng-class="strPasswordClass">
                                     <label for="password">Password:</label>
                                     <input ng-model="user.strPassword" type="password" class="form-control" placeholder=" ">
                                 </div>
-                                <div class="form-group">
+                                <div ng-class="strPasswordClass">
                                     <label for="password">Confirm Password:</label>
                                     <input ng-model="user.strConfirmPassword" type="password" class="form-control" placeholder=" ">
                                 </div>
-                                <div class="form-group">
+                                <div ng-class="strPhoneNumberClass">
                                     <label for="password">Phone Number:</label>
                                     <input ng-model="user.strPhoneNumber" class="form-control" placeholder=" ">
                                 </div>
-                                <div class="form-group">
+                                <div ng-class="strCountryClass" >
                                     <label for="sel1">Country: </label>
-                                    <ui-select ng-model="country.selected" theme="selectize" title="choose a country">
+                                    <ui-select ng-model="country.selected" theme="bootstrap" title="choose a country">
                                         <ui-select-match placeholder="choose or find a country...">{{$select.selected.name}}</ui-select-match>
                                         <ui-select-choices repeat="country in countries | filter: { name: $select.search } ">
                                             <span ng-bind-html="country.name | highlight: $select.search"></span>

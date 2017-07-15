@@ -73,7 +73,8 @@ app.post('/NewUserRegister', function (req, res) {
     MyMongo.Find('Users', { strEmail: req.body.user.strEmail }, function (result) {
         var Data = {};
         if (result.length > 0) {
-            Data.Result == 'userExist'
+            Data.Result = 'userExist'
+            res.end(JSON.stringify(Data))
         }
         else {
             MyMongo.Insert('Users', req.body.user, function (result) {
@@ -112,14 +113,14 @@ app.post('/api/uploadFile', function (req, res) {
 
 // Login del usuario
 app.post('/Logon', function (req, res) {
-    MyMongo.Find('Users', { $and: [{ "strEmail": req.body.userLogon.strEmail }, { "strPassword": req.body.userLogon.strEmail }] }, function (result) {
+    MyMongo.Find('Users', { $and: [{ "strEmail": req.body.userLogon.strEmail }, { "strPassword": req.body.userLogon.strPassword }] }, function (result) {
         var Data = {};
         if (result.length == 0) {
-            Data.Result == 'userDoesNotExist'
+            Data.Result = 'userDoesNotExist'
         }
         else {
             req.session.user = result[0];
-            Data.Result == 'ok'
+            Data.Result = 'ok'
         }
         res.end(JSON.stringify(Data));
     });
