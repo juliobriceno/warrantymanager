@@ -15,7 +15,7 @@
 .dw-loading:before {
     content: '';
     display: inline-block;
-    height: 100vh;
+    height: 100%;
     vertical-align: middle;
 }
 

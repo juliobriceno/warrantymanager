@@ -68,7 +68,8 @@ app.post('/getSession', function (req, res) {
     res.end(JSON.stringify(Data));
 });
 
-app.post('/api/NewUserRegister', function (req, res) {
+// Cargar nuevo usuario
+app.post('/NewUserRegister', function (req, res) {
     MyMongo.Find('Users', { strEmail: req.body.user.strEmail }, function (result) {
         var Data = {};
         if (result.length > 0) {
@@ -87,6 +88,7 @@ app.post('/api/NewUserRegister', function (req, res) {
     });
 });
 
+// Registrar un nuevo dispositivo
 app.post('/api/NewDeviceRegister', function (req, res) {
     var Data = {};
     MyMongo.Insert('Devices', req.body.device, function (result) {
@@ -97,6 +99,7 @@ app.post('/api/NewDeviceRegister', function (req, res) {
     });
 });
 
+// Subir archivos y escribirlos en disco
 app.post('/api/uploadFile', function (req, res) {
     var sampleFile;
     sampleFile = req.files.file;
@@ -104,6 +107,21 @@ app.post('/api/uploadFile', function (req, res) {
     fs.writeFile(newPath, sampleFile.data, function (err) {
         console.log(err);
         console.log('Guardado file');
+    });
+});
+
+// Login del usuario
+app.post('/Logon', function (req, res) {
+    MyMongo.Find('Users', { $and: [{ "strEmail": req.body.userLogon.strEmail }, { "strPassword": req.body.userLogon.strEmail }] }, function (result) {
+        var Data = {};
+        if (result.length == 0) {
+            Data.Result == 'userDoesNotExist'
+        }
+        else {
+            req.session.user = result[0];
+            Data.Result == 'ok'
+        }
+        res.end(JSON.stringify(Data));
     });
 });
 

@@ -189,3 +189,82 @@
 .text-login {color:#FFF;text-shadow: -5px -5px 5px #aaa;}
 
 .text-password{margin-top: 2%;}
+
+.container-widget{
+    width: 90%;
+    margin-top:-1% !important;
+    margin-left:5% !important;
+
+}
+.widget {
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  border-color: #e9e9e9;
+}
+
+.widget-icon {
+  background: #30426a;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  text-align: center;
+  vertical-align: middle;
+  margin-right: 15px;
+}
+
+.widget-icon i {
+  line-height: 66px;
+  color: #ffffff;
+  font-size: 30px;
+}
+
+.blue {
+  background: #2361ae !important;
+}
+.orange {
+  background: #d3a938 !important;
+}
+.red {
+  background: #ae2323 !important;
+}
+.green {
+  background: #23ae89 !important;
+}
+
+.title {
+  font-size: 28px;
+  display: block;
+}
+
+.widget-header {
+  color: #333;;
+  background-color: #f6f6f6;
+  padding: 10px 15px;
+  border-bottom: 1px solid #e9e9e9;
+  line-height: 30px;
+}
+.widget-header i {
+  margin-right: 5px;
+}
+.widget-body {
+  padding: 20px;
+}
+
+.widget-body table thead {
+  background: #fafafa;
+}
+.widget-body table thead * {
+  font-size: 14px !important;
+}
+.widget-body table tbody * {
+  font-size: 13px !important;
+}
+
+.comment{
+  font-size: 12px;
+  font-weight: bold;
+}

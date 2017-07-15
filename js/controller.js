@@ -229,6 +229,9 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.user.strEmail = '';
             $scope.user.strPassword = '';
             $scope.user.strPhoneNumber = '';
+            $scope.userLogon = {};
+            $scope.userLogon.strEmail = '';
+            $scope.userLogon.strPassword = '';
             // Crear nuevo usuario
             $scope.NewUserRegister = function () {
                 var Data = {};
@@ -237,7 +240,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 $loading.start('myloading');
                 $http({
                     method: 'POST',
-                    url: '/api/NewUserRegister',
+                    url: '/NewUserRegister',
                     headers: { 'Content-Type': 'application/json' },
                     data: Data
                 }).then(function successCallback(response) {
@@ -248,6 +251,28 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     }
                     else if (response.data.Result == 'userExist') {
                         window.location.href = '/home.html';
+                    }
+                }, function errorCallback(response) {
+                    alert(response.statusText);
+                });
+            }
+            $scope.Logon = function () {
+                $loading.start('myloading');
+                var Data = {};
+                Data.userLogon = $scope.userLogon;
+                $loading.start('myloading');
+                $http({
+                    method: 'POST',
+                    url: '/Logon',
+                    headers: { 'Content-Type': 'application/json' },
+                    data: Data
+                }).then(function successCallback(response) {
+                    $loading.finish('myloading');
+                    if (response.data.Result == 'ok') {
+                        window.location.href = '/home.html';
+                    }
+                    else if (response.data.Result == 'userDoesNotExist') {
+                        alert('User does not exist');
                     }
                 }, function errorCallback(response) {
                     alert(response.statusText);
