@@ -44,11 +44,12 @@
 </head>
 
 
+
 <body ng-controller="ctrlWarrantyLogin" class="background-login">
-    <div dw-loading="myloading" dw-loading-options="{text: 'Working...'}">
+    <div dw-loading="myloading" dw-loading-options="{text: 'Working...'}" >
         <div class="container">
             <div class="row form-login ">
-                <div class="col-md-8">
+                <div class="col-xs-12 col-sm-12 col-md-8">
                     <div class="text-center margen-col2 text-login">
                         <br>
                         <h3>Register Your Warranty</h3>
@@ -56,7 +57,7 @@
                         <p class="text-center">Cambia tus datos y</p>
                     </div>
                 </div>
-                <div class="col-md-4 well form-login">
+                <div class="col-xs-12 col-sm-12 col-md-4 well ">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#sign-in" data-toggle="tab">LOGIN</a></li>
                         <li><a href="#sign-out" data-toggle="tab">CREATE ACCOUNT</a></li>
@@ -95,10 +96,17 @@
                                 <br>
                                 <legend>Sign Up</legend>
 
-                                <div class="form-group">
-                                    <label for="email">First name:</label>
+                                <div class="form-group has-error has-feedback">
+                                    <label for="email">First name:</label> <a href="#" data-toggle="popover" title="Popover Header" data-content="Some content inside the popover"><span class="glyphicon glyphicon-question-sign" ></span></a>
                                     <input ng-model="user.strFirstName" class="form-control" placeholder="">
+
+                                    
+
+                                   
                                 </div>
+
+
+
                                 <div class="form-group">
                                     <label for="password">Last name:</label>
                                     <input ng-model="user.strLastName" class="form-control" placeholder=" ">
@@ -140,6 +148,11 @@
 
         <footer></footer>
     </div>  <!--FIN Loading-->
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+});
+</script>
 
 </body>
 </html>
