@@ -1,9 +1,36 @@
-﻿<div class="modal-header">
-    <h3 class="modal-title" id="modal-title">Mensaje!!!{{ctrl.titleMessage}}</h3>
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<link rel="stylesheet" href="css/estilosmodal.css" /> <!--enlace de hoja de estilos -->
+</head>
+<body>
+<div class="modal-header">
+    <h3 class="modal-title text-center" id="modal-title">Warranty{{ctrl.titleMessage}}</h3>
 </div>
 <div class="modal-body" id="modal-body">
-    {{ctrl.bodyMessage}} No existe el usuario!!!
+   
+
+    {{ctrl.bodyMessage}} 
+    <div class="text-center">
+    	<div class="image-modal-green" ><i class="fa fa-check fa-4x i-green" aria-hidden="true"></i></div> <br>
+    	<h2>Good Job!</h2>
+    	<p class="text-muted" style="display: block;">Happy day!!!
+    	</p>
+   	</div>
+   	<div class="text-center">
+    	<div class="image-modal-red" ><i class="fa fa-times fa-4x i-red" aria-hidden="true"></i></div><br>
+    	<h2>Bad Job!</h2>
+    	<p class="text-muted" style="display: block;">No existe el usuario!!!
+    	</p>
+   	</div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
-</div>
+    <div class="text-center">
+    <button class="btn btn-default btn-margen"  type="button" ng-click="">Cancel</button>
+    <button class="btn btn-primary btn-margen" type="button" ng-click="$ctrl.ok()">OK</button> 
+    </div>
+</div>    
+</body>
+
+</html>
