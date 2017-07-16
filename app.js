@@ -142,10 +142,14 @@ app.post('/NewUserRegister', function (req, res) {
 // Registrar un nuevo dispositivo
 app.post('/api/NewDeviceRegister', function (req, res) {
     var Data = {};
-    MyMongo.Insert('Devices', req.body.devices, function (result) {
+    MyMongo.Remove('Devices', { 'email': req.session.user.strEmail }, function (result) {
         if (result == 'Ok') {
-            Data.Result = 'ok';
-            res.end(JSON.stringify(Data))
+            MyMongo.Insert('Devices', req.body.devices, function (result) {
+                if (result == 'Ok') {
+                    Data.Result = 'ok';
+                    res.end(JSON.stringify(Data))
+                };
+            });
         };
     });
 });

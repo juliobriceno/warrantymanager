@@ -130,7 +130,7 @@
                         <div class="tab-pane active" id="home">
                             <div class="row  margen-col1">
                                 <div class="col-md-12 ">
-                                    <div ng-repeat="message in messages | filter: {read: false } " ng-class="message.messagetype" role="alert">
+                                    <div ng-repeat="message in messages track by $index | filter: {read: false } " ng-class="message.messagetype" role="alert">
                                         <button ng-click="UpdateMessages(message);" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <strong>{{message.message}}</strong> {{message.message2}}
                                     </div>
@@ -211,7 +211,7 @@
                                                 <div class="table-responsive">
                                                     <table class="table">
                                                         <tbody>
-                                                            <tr ng-repeat="message in messages"><td>{{message.message + ' ' + message.message2}}</td><td><span ng-class="message.messagetype2"><i ng-class="message.messagetype3"></i></span></td></tr>
+                                                            <tr ng-repeat="message in messages track by $index"><td>{{message.message + ' ' + message.message2}}</td><td><span ng-class="message.messagetype2"><i ng-class="message.messagetype3"></i></span></td></tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -239,7 +239,7 @@
                                                             <tr><th>File</th><th>Category</th><th>Make</th><th>Model</tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr ng-repeat="device in devices"><td><a target="_blank" ng-href='/uploads/{{device.FileName}}' class="fa fa-file"></a> </td><td>{{device.category}}</td><td>{{device.make}}</td><td>{{device.model}}</td></tr>
+                                                            <tr ng-repeat="device in devices track by $index"><td><a target="_blank" ng-href='/uploads/{{device.FileName}}' class="fa fa-file"></a> </td><td>{{device.category}}</td><td>{{device.make}}</td><td>{{device.model}}</td></tr>
                                                         </tbody>
                                                     </table>
                                                 </div>

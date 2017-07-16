@@ -83,6 +83,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                         $scope.user = response.data.User;
                         $scope.messages = response.data.Messages;
                         $scope.devices = response.data.Devices;
+                        console.log($scope.devices);
                     }
                     else if (response.data.Result == 'userExist') {
                         window.location.href = '/home.html';
