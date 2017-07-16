@@ -1,0 +1,62 @@
+<!doctype html>
+<html ng-app="ui.bootstrap.demo">
+  <head>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+    <script src="example.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"> <!-- enlace con fuentes font-awosome-->
+  </head>
+  <body>
+
+<style type="text/css">
+  form.tab-form-demo .tab-pane {
+    margin: 20px 20px;
+  }
+</style>
+
+<div ng-controller="TabsDemoCtrl">
+
+
+  <uib-tabset active="active" vertical="true">
+    <uib-tab index="0" heading="Home">
+        <uib-tab-heading>
+            <a href="#home" data-toggle="tab"><i class="fa fa-home fa-lg" aria-hidden="true"></i> Home</a>
+        </uib-tab-heading>
+        Lo del home
+    </uib-tab>
+    <uib-tab index="1" heading="Home">
+        <uib-tab-heading>
+            <a href="#register-device" data-toggle="tab"><i class="glyphicon glyphicon-edit fa-lg"></i> Register Device</a>
+        </uib-tab-heading>
+        Lo del home 2222222222
+    </uib-tab>
+    <uib-tab index="2" heading="Home">
+        <uib-tab-heading>
+            <a href="#" data-toggle="collapse" data-target="#submenu-1"><i class=" fa fa-microchip fa-lg"></i> My Devices<i class="fa fa-fw fa-angle-down pull-right"></i></a>
+        </uib-tab-heading>
+    </uib-tab>
+      <uib-tab index="3" heading="Home">
+          <uib-tab-heading>
+              <a href="#recomendations" data-toggle="tab"><i class="fa fa-lightbulb-o fa-lg"></i> Recomendations</a>
+          </uib-tab-heading>
+      </uib-tab>
+      <uib-tab index="4" heading="Home">
+          <uib-tab-heading>
+              <a href="#my-register" data-toggle="tab"><i class="fa fa-cog fa-lg"></i> My Account</a>
+          </uib-tab-heading>
+      </uib-tab>
+    <uib-tab index="5" select="alertMe()">
+        <uib-tab-heading>
+            <a href="#log-out" data-toggle="tab"><i class="fa fa-sign-out fa-lg"></i> Log-Out</a>
+        </uib-tab-heading>
+        I've got an HTML heading, and a select callback. Pretty cool!
+    </uib-tab>
+  </uib-tabset>
+
+</div>
+
+</body>
+</html>

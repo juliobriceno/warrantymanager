@@ -32,6 +32,7 @@
       <!-- *****************************************Librería de controlador principal***************************************** -->
       <script src="js/controller.js"></script>
       <!-- *****************************************Librería de angular loading***************************************** -->
+      <script src="js/spin.min.js"></script>
       <script src="js/angular-loading.min.js"></script>
       <link rel="stylesheet" type="text/css" href="css/angular-loading.css" />
       <!-- *****************************************Librería de angular tags inputs***************************************** -->
@@ -42,100 +43,96 @@
 
 	</head>
 
-
 	<body ng-controller="ctrlWarrantyHome" class="ng-cloak">
-	
-        <div id="contenido">
-        <!-- Navigation -->
+        <div dw-loading="myloading" dw-loading-options="{text: 'Working...'}">
+            <div id="contenido">
+                <!-- Navigation -->
 
-            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav1">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="#" ></a>
-                    </div>
+                <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav1">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="#"></a>
+                        </div>
 
-                    <div  class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li>
-                                <a href="#" data-placement="bottom" data-toggle="tooltip" href="#" data-original-title="alerts" ><i class="glyphicon glyphicon-bell" ></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="glyphicon glyphicon-user icon-tamano"></i> julio.b@gmail.com</a>
-                            </li>
-                        </ul>
-                    </div>
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <a href="#" data-placement="bottom" data-toggle="tooltip" href="#" data-original-title="alerts">
+                                        <i class="glyphicon glyphicon-bell"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="glyphicon glyphicon-user icon-tamano"></i> {{user.strFirstName}}</a>
+                                </li>
+                            </ul>
+                        </div>
 
-                </div> <!--FIN DE container fluid-->
+                    </div> <!--FIN DE container fluid-->
 
-            </nav> <!--FIN NAVBAR PASWORD DONDE-->
-            
+                </nav> <!--FIN NAVBAR PASWORD DONDE-->
 
-            <nav class="navbar navbar-static-top " role="navigation">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav1" >
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                    </div>
-                    <div class="collapse navbar-collapse" id="nav1">
-                        <ul id="tabs" class="nav navbar-nav side-menu " data-tabs="tabs">
-                            <li>
-                                <a href="#home" data-toggle="tab"><i class="fa fa-home fa-lg" aria-hidden="true"></i> Home</a>
-                            </li>
-                            <li>
-                                <a href="#register-device" data-toggle="tab"><i class="glyphicon glyphicon-edit fa-lg"></i> Register Device</a>
-                            </li>
-                            <li>
-                                <a href="#" data-toggle="collapse" data-target="#submenu-1"><i class=" fa fa-microchip fa-lg"></i> My Devices<i class="fa fa-fw fa-angle-down pull-right"></i></a>
-                                <ul id="submenu-1" class="collapse">
-                                    <li>
-                                        <a href="#current-device"  data-toggle="tab"><i class="fa fa-angle-double-right fa-lg"></i> Current devices </a>
-                                    </li>
-                                    <li>
-                                        <a href="#past-devices" data-toggle="tab"><i class="fa fa-angle-double-right fa-lg"></i> Past devices</a>
-                                    </li>
-                                    <li>
-                                        <a href="#close-devices" data-toggle="tab"><i class="fa fa-angle-double-right fa-lg"></i> Warranty close devices</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#recomendations" data-toggle="tab"><i class="fa fa-lightbulb-o fa-lg"></i> Recomendations</a>
-                            </li>
-                            <li class="">
-                                <a href="#my-register" data-toggle="tab"><i class="fa fa-cog fa-lg"></i> My Account</a>
-                            </li>
-                            <li class="">
-                                <a href="#log-out" data-toggle="tab"><i class="fa fa-sign-out fa-lg"></i> Log-Out</a>
-                            </li>
-                        </ul>
-                    </div><!-- /.navbar-collapse -->
-                </div><!-- /.container-fluid -->
-            </nav>
 
-            <div>
+                <nav class="navbar navbar-static-top " role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav1">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div class="collapse navbar-collapse" id="nav1">
+                            <ul id="tabs" class="nav navbar-nav side-menu " data-tabs="tabs">
+                                <li>
+                                    <a href="#home" data-toggle="tab"><i class="fa fa-home fa-lg" aria-hidden="true"></i> Home</a>
+                                </li>
+                                <li>
+                                    <a href="#register-device" data-toggle="tab"><i class="glyphicon glyphicon-edit fa-lg"></i> Register Device</a>
+                                </li>
+                                <li>
+                                    <a href="#" data-toggle="collapse" data-target="#submenu-1"><i class=" fa fa-microchip fa-lg"></i> My Devices<i class="fa fa-fw fa-angle-down pull-right"></i></a>
+                                    <ul id="submenu-1" class="collapse">
+                                        <li>
+                                            <a href="#current-device" data-toggle="tab"><i class="fa fa-angle-double-right fa-lg"></i> Current devices </a>
+                                        </li>
+                                        <li>
+                                            <a href="#past-devices" data-toggle="tab"><i class="fa fa-angle-double-right fa-lg"></i> Past devices</a>
+                                        </li>
+                                        <li>
+                                            <a href="#close-devices" data-toggle="tab"><i class="fa fa-angle-double-right fa-lg"></i> Warranty close devices</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#recomendations" data-toggle="tab"><i class="fa fa-lightbulb-o fa-lg"></i> Recomendations</a>
+                                </li>
+                                <li class="">
+                                    <a href="#my-register" data-toggle="tab"><i class="fa fa-cog fa-lg"></i> My Account</a>
+                                </li>
+                                <li ng-click="Logout();">
+                                    <a href="#log-out" data-toggle="tab"><i class="fa fa-sign-out fa-lg"></i> Log-Out</a>
+                                </li>
+                            </ul>
+                        </div><!-- /.navbar-collapse -->
+                    </div><!-- /.container-fluid -->
+                </nav>
 
-                <div id="my-tab-content" class="tab-content">
-                    <div class="tab-pane" id="home">
+                <div>
+
+                    <div id="my-tab-content" class="tab-content">
+                        <div class="tab-pane active" id="home">
                             <div class="row  margen-col1">
                                 <div class="col-md-12 ">
-                                    <div class="alert alert-success alert-dismissible" role="alert">
+                                    <div ng-repeat="message in messages" ng-class="message.messagetype" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <strong>Tranks for visiting!</strong> You successfully read this important alert message..
-                                    </div>
-                                    <div class="alert alert-danger alert-dismissible" role="alert">
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <strong>Oh snap! Change a few things up and try submitting again. </strong>
+                                        <strong>{{message.message}}</strong> {{message.message2}}
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +156,7 @@
                                     <div class="widget">
                                         <div class="widget-body">
                                             <div class="widget-content">
-                                                <div class="widget-icon red pull-left">
+                                                <div class="widget-icon orange pull-left">
                                                     <i class="glyphicon glyphicon-ok"></i>
                                                 </div>
                                                 <div class="comment">Past Devices</div>
@@ -173,7 +170,7 @@
                                     <div class="widget">
                                         <div class="widget-body">
                                             <div class="widget-content">
-                                                <div class="widget-icon orange pull-left">
+                                                <div class="widget-icon red pull-left">
                                                     <i class="glyphicon glyphicon-lock"></i>
                                                 </div>
                                                 <div class="comment">Close Devices</div>
@@ -204,7 +201,7 @@
                                     <div class="widget">
                                         <div class="widget-header">
                                             <i class="fa fa-tasks"></i>
-                                            History
+                                            Alerts & Messages
                                             <div class="pull-right"></div>
                                         </div>
 
@@ -215,17 +212,8 @@
                                                     <table class="table">
 
                                                         <tbody>
-                                                            <tr><td>RDVMPC001</td><td>238.103.133.37</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-                                                            <tr><td>RDVMPC002</td><td>68.66.63.170</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-                                                            <tr><td>RDVMPC003</td><td>76.117.212.33</td><td><span tooltip="Server Down!" class="text-danger"><i class="fa fa-warning"></i></span></td></tr>
-                                                            <tr><td>RDPHPC001</td><td>91.88.224.5</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-                                                            <tr><td>RDESX001</td><td>197.188.15.93</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-                                                            <tr><td>RDESX002</td><td>168.85.154.251</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-                                                            <tr><td>RDESX003</td><td>209.25.191.61</td><td><span tooltip="Server Down!" class="text-danger"><i class="fa fa-warning"></i></span></td></tr>
-                                                            <tr><td>RDESX004</td><td>252.37.192.235</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-                                                            <tr><td>RDTerminal01</td><td>139.71.18.207</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-                                                            <tr><td>RDTerminal02</td><td>136.80.122.212</td><td><span tooltip="Could not connect!" class="text-warning"><i class="fa fa-flash"></i></span></td></tr>
-                                                            <tr><td>RDDomainCont01</td><td>196.80.245.33</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
+                                                            <tr><td>Bienvenido a sistema</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
+                                                            <tr><td>Crea un dispositivo<td><span tooltip="Server Down!" class="text-danger"><i class="fa fa-warning"></i></span></td></tr>
                                                         </tbody>
 
                                                     </table>
@@ -251,12 +239,12 @@
                                                 <div class="table-responsive">
                                                     <table class="table">
                                                         <thead>
-                                                            <tr><th class="text-center">ID</th><th>Username</th><th>Role</th><th>Account</th></tr>
+                                                            <tr><th>Category</th><th>Make</th><th>Model</tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr><td class="text-center">1</td><td>Joe Bloggs</td><td>Super Admin</td><td>AZ23045</td></tr>
-                                                            <tr><td class="text-center">2</td><td>Timothy Hernandez</td><td>Admin</td><td>AU24783</td></tr>
-                                                            <tr><td class="text-center">3</td><td>Joe Bickham</td><td>User</td><td>AM23781</td></tr>
+                                                            <tr><td>Celular</td><td>Samsung</td><td>Galaxy 6</td></tr>
+                                                            <tr><td>Celular</td><td>Samsung</td><td>Galaxy 8</td></tr>
+                                                            <tr><td>Celular</td><td>Apple</td><td>IPhone 6</td></tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -270,203 +258,198 @@
                             </div><!-- fin tab home-->
                             <br><br>
 
-                        
-                    </div>
-                    <div class="tab-pane" id="my-register">
-                        <div class="container-fluid">
-                            <div class="row margen-col1">
-                                <div>
-                                    <legend><i class="fa fa-cog"></i> My Account</legend>
-
-                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-line">
-                                    <div class="form-group">
-                                        <label for="exampleInputUsername">First Name:</label>
-                                        <input type="text" class="form-control" id="" placeholder=" Enter Name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="telephone">Last Name:</label>
-                                        <input type="tel" class="form-control" id="telephone" placeholder=" Enter Last name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail">Email Address:</label>
-                                        <input type="email" class="form-control" id="exampleInputEmail" placeholder="Enter Email id">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="telephone">Password:</label>
-                                        <input type="tel" class="form-control" id="telephone" placeholder="Enter Password">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="telephone">Phone Number:</label>
-                                        <input type="tel" class="form-control" id="telephone" placeholder="Enter Phone number">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="country"> Country:</label>
-                                        <ui-select ng-model="ctrl.country.selected" theme="selectize" ng-disabled="ctrl.disabled" title="Choose a country">
-                                            <ui-select-match placeholder="Select or search a country in the list...">{{$select.selected.name}}</ui-select-match>
-                                            <ui-select-choices repeat="country in ctrl.countries | filter: $select.search">
-                                                <span ng-bind-html="country.name | highlight: $select.search"></span>
-                                                <small ng-bind-html="country.code | highlight: $select.search"></small>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-                                    <hr>
-                                    <button type="button" class="btn btn-primary submit pull-right"><i class="fa fa-paper-plane" aria-hidden="true"></i> Save</button>
-                                    </div><!-- fin form-->
-
-                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-
-                                        <div class="text-center margen-col2">
-                                            <span class="glyphicon glyphicon-pencil" style="font-size: 5em;"></span>
-                                            <h4>Update your account</h4>
-                                            <p class="text-center">Set new values and press save.</p>
-                                            <p class="text-center"></p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div> <!--fin rom my register-->
 
                         </div>
-
-                    </div>
-
-                    <div class="tab-pane active" id="register-device">
-                        <div class="container-fluid">
-                            <div class="row margen-col1">
-                                <legend><i class="fa fa-cog"></i> Register Device</legend>
-                                <div class="row">
+                        <div class="tab-pane" id="my-register">
+                            <div class="container-fluid">
+                                <div class="row margen-col1">
                                     <div>
+                                        <legend><i class="fa fa-cog"></i> My Account</legend>
+
                                         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-line">
                                             <div class="form-group">
-                                                <label for="serial">Serial:</label>
-                                                <input ng-model="device.strSerial" type="text" class="form-control" id="serial" placeholder=" Enter Serial">
+                                                <label for="exampleInputUsername">First Name:</label>
+                                                <input type="text" class="form-control" id="" placeholder=" Enter Name">
                                             </div>
                                             <div class="form-group">
-                                                <label for="sel1">Make: </label>
-                                                <ui-select ng-change="FillModels();" ng-model="make.selected" theme="selectize" title="choose a country">
-                                                    <ui-select-match placeholder="choose or find a model...">{{$select.selected.name}}</ui-select-match>
-                                                    <ui-select-choices repeat="make in makes | filter: { name: $select.search } ">
-                                                        <span ng-bind-html="make.name | highlight: $select.search"></span>
+                                                <label for="telephone">Last Name:</label>
+                                                <input type="tel" class="form-control" id="telephone" placeholder=" Enter Last name">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail">Email Address:</label>
+                                                <input type="email" class="form-control" id="exampleInputEmail" placeholder="Enter Email id">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="telephone">Password:</label>
+                                                <input type="tel" class="form-control" id="telephone" placeholder="Enter Password">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="telephone">Phone Number:</label>
+                                                <input type="tel" class="form-control" id="telephone" placeholder="Enter Phone number">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="country"> Country:</label>
+                                                <ui-select ng-model="ctrl.country.selected" theme="selectize" ng-disabled="ctrl.disabled" title="Choose a country">
+                                                    <ui-select-match placeholder="Select or search a country in the list...">{{$select.selected.name}}</ui-select-match>
+                                                    <ui-select-choices repeat="country in ctrl.countries | filter: $select.search">
+                                                        <span ng-bind-html="country.name | highlight: $select.search"></span>
+                                                        <small ng-bind-html="country.code | highlight: $select.search"></small>
                                                     </ui-select-choices>
                                                 </ui-select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="sel1">Model: </label>
-                                                <ui-select ng-model="model.selected" theme="selectize" title="choose a country">
-                                                    <ui-select-match placeholder="choose or find a model...">{{$select.selected.name}}</ui-select-match>
-                                                    <ui-select-choices repeat="model in models | filter: { name: $select.search } | filter: { makeid: make.selected.id } ">
-                                                        <span ng-bind-html="model.name | highlight: $select.search"></span>
-                                                    </ui-select-choices>
-                                                </ui-select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="date">Date Of Purchase:</label>
-                                                <p class="input-group">
-                                                    <input ng-model="device.datDatePurchase" type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
-                                                    <span class="input-group-btn">
-                                                        <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
-                                                    </span>
-                                                </p>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="sel1">Category: </label>
-                                                <ui-select ng-change="FillSubCategories();" ng-model="category.selected" theme="selectize" title="choose a country">
-                                                    <ui-select-match placeholder="choose or find a country...">{{$select.selected.name}}</ui-select-match>
-                                                    <ui-select-choices repeat="category in categories | filter: { name: $select.search } ">
-                                                        <span ng-bind-html="category.name | highlight: $select.search"></span>
-                                                    </ui-select-choices>
-                                                </ui-select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="sel1">SubCategory: </label>
-                                                <ui-select ng-model="subcategory.selected" theme="selectize" title="choose a country">
-                                                    <ui-select-match placeholder="choose or find a country...">{{$select.selected.name}}</ui-select-match>
-                                                    <ui-select-choices repeat="subcategory in subcategories | filter: { name: $select.search } | filter: { categoryid: category.selected.id } ">
-                                                        <span ng-bind-html="subcategory.name | highlight: $select.search"></span>
-                                                    </ui-select-choices>
-                                                </ui-select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="vendedor">Vendor:</label>
-                                                <input ng-model="device.strVendor" type="tel" class="form-control" id="vendedor" placeholder="Enter Vendor">
                                             </div>
                                             <hr>
-                                            <button ng-click="NewDeviceRegister();" type="button" class="btn btn-primary submit pull-right"><i class="fa fa-paper-plane" aria-hidden="true"></i> Save</button>
+                                            <button type="button" class="btn btn-primary submit pull-right"><i class="fa fa-paper-plane" aria-hidden="true"></i> Save</button>
                                         </div><!-- fin form-->
 
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                        <div class="row margen-colup">
-                                            <div class="col-md-12 file-input">
-                                                <p>Fill product data, upload files (picture, pdf files, etc) and press save</p>
-                                                <!--<a href="#" class="btn btn-default btn-sm "><i class="fa fa-cloud-upload fa-3x"></i> Upload File</a>-->
-                                                <button class="btn-file-input btn btn-default btn-sm"><i class="fa fa-cloud-upload fa-3x"></i> Upload File</button>
-                                                <input type="file" nv-file-select uploader="uploader" multiple hidden>
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+                                            <div class="text-center margen-col2">
+                                                <span class="glyphicon glyphicon-pencil" style="font-size: 5em;"></span>
+                                                <h4>Update your account</h4>
+                                                <p class="text-center">Set new values and press save.</p>
+                                                <p class="text-center"></p>
                                             </div>
-                                            <div class="col-md-12">
-                                                <br>
-                                                <table ng-show="uploader.queue.length > 0" class="table table-striped table-responsive">
-                                                    <thead>
-                                                        <tr>
-                                                        <th>Name</th>
-                                                        <th>Size</th>
-                                                        <th>Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tr ng-repeat="item in uploader.queue">
-                                                        <td>
-                                                            {{ item.file.name }}
-                                                            <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>                                                        
-                                                        </td>
-                                                        <td>{{ item.file.size/1024/1024|number:2 }} MB</td>
-                                                        <td class="text-center"><a ng-click="item.remove()" href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Delete</a></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
+
                                         </div>
-                                    </div><!--fin col 2-->
-                                </div>
+                                    </div>
+                                </div> <!--fin rom my register-->
 
                             </div>
+
                         </div>
+
+                        <div class="tab-pane" id="register-device">
+                            <div class="container-fluid">
+                                <div class="row margen-col1">
+                                    <legend><i class="fa fa-cog"></i> Register Device</legend>
+                                    <div class="row">
+                                        <div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-line">
+                                                <div class="form-group">
+                                                    <label for="serial">Serial:</label>
+                                                    <input ng-model="device.strSerial" type="text" class="form-control" id="serial" placeholder=" Enter Serial">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="sel1">Make: </label>
+                                                    <ui-select ng-change="FillModels();" ng-model="make.selected" theme="selectize" title="choose a country">
+                                                        <ui-select-match placeholder="choose or find a model...">{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices repeat="make in makes | filter: { name: $select.search } ">
+                                                            <span ng-bind-html="make.name | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="sel1">Model: </label>
+                                                    <ui-select ng-model="model.selected" theme="selectize" title="choose a country">
+                                                        <ui-select-match placeholder="choose or find a model...">{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices repeat="model in models | filter: { name: $select.search } | filter: { makeid: make.selected.id } ">
+                                                            <span ng-bind-html="model.name | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="date">Date Of Purchase:</label>
+                                                    <p class="input-group">
+                                                        <input ng-model="device.datDatePurchase" type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="sel1">Category: </label>
+                                                    <ui-select ng-change="FillSubCategories();" ng-model="category.selected" theme="selectize" title="choose a country">
+                                                        <ui-select-match placeholder="choose or find a country...">{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices repeat="category in categories | filter: { name: $select.search } ">
+                                                            <span ng-bind-html="category.name | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="sel1">SubCategory: </label>
+                                                    <ui-select ng-model="subcategory.selected" theme="selectize" title="choose a country">
+                                                        <ui-select-match placeholder="choose or find a country...">{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices repeat="subcategory in subcategories | filter: { name: $select.search } | filter: { categoryid: category.selected.id } ">
+                                                            <span ng-bind-html="subcategory.name | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vendedor">Vendor:</label>
+                                                    <input ng-model="device.strVendor" type="tel" class="form-control" id="vendedor" placeholder="Enter Vendor">
+                                                </div>
+                                                <hr>
+                                                <button ng-click="NewDeviceRegister();" type="button" class="btn btn-primary submit pull-right"><i class="fa fa-paper-plane" aria-hidden="true"></i> Save</button>
+                                            </div><!-- fin form-->
+
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                            <div class="row margen-colup">
+                                                <div class="col-md-12 file-input">
+                                                    <p>Fill product data, upload files (picture, pdf files, etc) and press save</p>
+                                                    <!--<a href="#" class="btn btn-default btn-sm "><i class="fa fa-cloud-upload fa-3x"></i> Upload File</a>-->
+                                                    <button class="btn-file-input btn btn-default btn-sm"><i class="fa fa-cloud-upload fa-3x"></i> Upload File</button>
+                                                    <input type="file" nv-file-select uploader="uploader" multiple hidden>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <br>
+                                                    <table ng-show="uploader.queue.length > 0" class="table table-striped table-responsive">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Name</th>
+                                                                <th>Size</th>
+                                                                <th>Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tr ng-repeat="item in uploader.queue">
+                                                            <td>
+                                                                {{ item.file.name }}
+                                                                <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+                                                            </td>
+                                                            <td>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                                            <td class="text-center"><a ng-click="item.remove()" href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Delete</a></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div><!--fin col 2-->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="tab-pane" id="current-device">
+                            <div class="container well">
+                                <h1>TAB3</h1>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="past-devices">
+                            <div class="container well">
+                                <h1>TAB4</h1>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="close-devices">
+                            <div class="container well">
+                                <h1>TAB5</h1>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="recomendations">
+                            <div class="container well">
+                                <h1>TAB5</h1>
+                            </div>
+                        </div>
+                        <div></div>
                     </div>
 
+                </div><!--FIN TAB CONTENT-->
 
+            </div>  <!-- Fin de contenido -->
 
-                    <div class="tab-pane" id="current-device">
-                        <div class="container well">
-                            <h1>TAB3</h1>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="past-devices">
-                        <div class="container well">
-                            <h1>TAB4</h1>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="close-devices">
-                        <div class="container well">
-                            <h1>TAB5</h1>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="recomendations">
-                        <div class="container well">
-                            <h1>TAB5</h1>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="log-out">
-                        <div class="container well">
-                            <h1>TAB5</h1>
-                        </div>
-                    </div>
-                </div>
+            <footer></footer>
+    </div>
+</body>
 
-            </div><!--FIN TAB CONTENT-->
-
-        </div>  <!-- Fin de contenido -->         
-
-        <footer>
-        </footer>
-
-      </body>
-
-      </html>
+</html>

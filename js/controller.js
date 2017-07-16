@@ -64,6 +64,30 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.device.strSerial = '';
             $scope.device.datDatePurchase = new Date();
             $scope.device.strVendor = '';
+            // Get Initial Data
+            $scope.GetInitialData = function () {
+                $loading.start('myloading');
+                $http({
+                    method: 'POST',
+                    url: '/api/GetInitialData',
+                    headers: { 'Content-Type': 'application/json' },
+                    data: {}
+                }).then(function successCallback(response) {
+                    console.log(response);
+                    $loading.finish('myloading');
+                    if (response.data.Result == 'ok') {
+                        console.log(response);
+                        $scope.user = response.data.User;
+                        $scope.messages = response.data.Messages;
+                    }
+                    else if (response.data.Result == 'userExist') {
+                        window.location.href = '/home.html';
+                    }
+                }, function errorCallback(response) {
+                    alert(response.statusText);
+                });
+            };
+            $scope.GetInitialData();
             // Crear nuevo dispositivo
             $scope.NewDeviceRegister = function () {
                 var Data = {};
@@ -89,6 +113,22 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     alert(response.statusText);
                 });
             }
+            $scope.Logout = function () {
+                $loading.start('myloading');
+                $http({
+                    method: 'POST',
+                    url: '/api/Logout',
+                    headers: { 'Content-Type': 'application/json' },
+                    data: {}
+                }).then(function successCallback(response) {
+                    $loading.finish('myloading');
+                    if (response.data.Result == 'ok') {
+                        window.location.href = '/index.html';
+                    }
+                }, function errorCallback(response) {
+                    alert(response.statusText);
+                });
+            };
             // Modal de mensajes
             $scope.MessagesModalInterface = {};
             $scope.animationsEnabled = true;
@@ -311,7 +351,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             }
             $scope.Logon = function () {
                 var booError = false;
-                if ($scope.userLogon.strEmail.trim() == '') {
+                if (!$scope.ValidateEmail($scope.userLogon.strEmail.trim())) {
                     $scope.strEmailLogonClass = 'form-group has-error has-feedback'
                     booError = true;
                 }
@@ -345,7 +385,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 }, function errorCallback(response) {
                     alert(response.statusText);
                 });
-            }
+            };
             // Modal de mensajes
             $scope.MessagesModalInterface = {};
             $scope.animationsEnabled = true;

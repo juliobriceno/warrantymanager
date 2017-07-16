@@ -68,6 +68,14 @@ app.post('/getSession', function (req, res) {
     res.end(JSON.stringify(Data));
 });
 
+// Cierra sesión
+app.post('/api/Logout', function (req, res) {
+    var Data = {};
+    req.session.user = undefined;
+    Data.Result = 'ok';
+    res.end(JSON.stringify(Data));
+});
+
 // Cargar nuevo usuario
 app.post('/NewUserRegister', function (req, res) {
     MyMongo.Find('Users', { strEmail: req.body.user.strEmail }, function (result) {
@@ -79,10 +87,15 @@ app.post('/NewUserRegister', function (req, res) {
         else {
             MyMongo.Insert('Users', req.body.user, function (result) {
                 if (result == 'Ok') {
-                    Data.Result = 'ok';
                     req.body.user.strPassword = 'xxxxxxxxxxxxxxxxx';
                     req.session.user = req.body.user;
-                    res.end(JSON.stringify(Data))
+                    MyMongo.Insert('Messages', [{ email: req.session.user.strEmail, messagetype: 'alert alert-success alert-dismissible', message: req.body.user.strFirstName + ' Tranks for use us!', message2: 'Now we work for you :) ...', read: false }, { email: req.session.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', message: req.body.user.strFirstName + ' Hey!', message2: 'You dont hace any register device ...', read: false }], function (result) {
+                        if (result == 'Ok') {
+                            req.session.messages = [{ email: req.session.user.strEmail, messagetype: 'alert alert-success alert-dismissible', message: req.body.user.strFirstName + ' Tranks for use us!', message2: 'Now we work for you :) ...', read: false }, { email: req.session.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', message: req.body.user.strFirstName + ' Hey!', message2: 'You dont hace any register device ...', read: false }];
+                            Data.Result = 'ok';
+                            res.end(JSON.stringify(Data))
+                        };
+                    });
                 };
             });
         }
@@ -111,6 +124,15 @@ app.post('/api/uploadFile', function (req, res) {
     });
 });
 
+// Obtener data inicial
+app.post('/api/GetInitialData', function (req, res) {
+    var Data = {};
+    Data.Result = "ok";
+    Data.User = req.session.user;
+    Data.Messages = req.session.messages;
+    res.end(JSON.stringify(Data));
+});
+
 // Login del usuario
 app.post('/Logon', function (req, res) {
     MyMongo.Find('Users', { $and: [{ "strEmail": req.body.userLogon.strEmail }, { "strPassword": req.body.userLogon.strPassword }] }, function (result) {
@@ -120,9 +142,14 @@ app.post('/Logon', function (req, res) {
         }
         else {
             req.session.user = result[0];
-            Data.Result = 'ok'
+            MyMongo.Find('Messages', { "email": req.session.user.strEmail }, function (result) {
+                req.session.messages = result;
+                Data.User = req.session.user;
+                Data.Messages = req.session.messages;
+                Data.Result = 'ok';
+                res.end(JSON.stringify(Data));
+            });
         }
-        res.end(JSON.stringify(Data));
     });
 });
 
