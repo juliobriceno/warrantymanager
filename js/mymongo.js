@@ -22,6 +22,37 @@ module.exports = {
             }
         });
     },
+    UpdateCriteria: function Update(pcollection, criteria, set, callback) {
+        var mongodb = require('mongodb');
+        var MongoClient = mongodb.MongoClient;
+        var url = 'mongodb://juliobricenoro:juliobricenoro@ds153652.mlab.com:53652/warranty';
+        MongoClient.connect(url, function (err, db) {
+            if (err) {
+                console.log('Tremendo Error!!!!');
+            }
+            else {
+                var collection = db.collection(pcollection);
+                collection.update(criteria, { $set: set }, function (err, result) {
+                    if (err) {
+                        console.log('Tremenda ERROR compadre');
+                    }
+                    else {
+                        var collection = db.collection('Log');
+                        var dataInsert = set;
+                        collection.insert(dataInsert, function (err, result) {
+                            if (err) {
+                                console.log('Tremenda ERROR compadre');
+                            }
+                            else {
+                                callback('Ok');
+                            }
+                            db.close();
+                        });
+                    }
+                });
+            }
+        });
+    },
     Find: function Find(pcollection, filter, callback) {
         var mongodb = require('mongodb');
         var MongoClient = mongodb.MongoClient;
@@ -36,7 +67,6 @@ module.exports = {
                     if (err) {
                         console.log(err);
                     } else if (result.length) {
-                        console.log('Found:', result);
                         callback(result);
                     } else {
                         callback([]);

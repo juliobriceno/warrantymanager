@@ -64,6 +64,11 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.device.strSerial = '';
             $scope.device.datDatePurchase = new Date();
             $scope.device.strVendor = '';
+            $scope.strSerialClass = 'form-group';
+            $scope.modelClass = 'form-group';
+            $scope.datDatePurchaseClass = 'form-group';
+            $scope.subcategoryClass = 'form-group';
+            $scope.strVendorClass = 'form-group';
             // Get Initial Data
             $scope.GetInitialData = function () {
                 $loading.start('myloading');
@@ -73,12 +78,11 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     headers: { 'Content-Type': 'application/json' },
                     data: {}
                 }).then(function successCallback(response) {
-                    console.log(response);
                     $loading.finish('myloading');
                     if (response.data.Result == 'ok') {
-                        console.log(response);
                         $scope.user = response.data.User;
                         $scope.messages = response.data.Messages;
+                        $scope.devices = response.data.Devices;
                     }
                     else if (response.data.Result == 'userExist') {
                         window.location.href = '/home.html';
@@ -90,10 +94,50 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.GetInitialData();
             // Crear nuevo dispositivo
             $scope.NewDeviceRegister = function () {
+                var booError = false;
+                if ($scope.device.strSerial.trim() == '') {
+                    $scope.strSerialClass = 'form-group has-error has-feedback'
+                    booError = true;
+                }
+                else {
+                    $scope.strSerialClass = 'form-group'
+                }
+                if (typeof $scope.model.selected.name == 'undefined') {
+                    $scope.modelClass = 'form-group has-error has-feedback'
+                    booError = true;
+                }
+                else {
+                    $scope.modelClass = 'form-group'
+                }
+                if (typeof $scope.subcategory.selected.name == 'undefined') {
+                    $scope.subcategoryClass = 'form-group has-error has-feedback'
+                    booError = true;
+                }
+                else {
+                    $scope.subcategoryClass = 'form-group'
+                }
+                if ($scope.device.strVendor.trim() == '') {
+                    $scope.strVendorClass = 'form-group has-error has-feedback'
+                    booError = true;
+                }
+                else {
+                    $scope.strVendorClass = 'form-group'
+                }
+                if (booError == true) { return 0; }
+                var DataDevice = {};
+                DataDevice.device = $scope.device;
+                DataDevice.device.make = $scope.make.selected.name;
+                DataDevice.device.model = $scope.model.selected.name;
+                DataDevice.device.subcategory = $scope.subcategory.selected.name;
+                DataDevice.device.category = $scope.category.selected.name;
+                DataDevice.device.email = $scope.user.strEmail;
+                DataDevice.device.FileName = '';
+                if ($scope.uploader.queue.length > 0) {
+                    DataDevice.device.FileName = $scope.uploader.queue[0].file.name;
+                }
+                $scope.devices.push(DataDevice.device);
                 var Data = {};
-                Data.device = $scope.device;
-                Data.device.model = $scope.model.selected.name;
-                Data.device.subcategory = $scope.subcategory.selected.name;
+                Data.devices = $scope.devices;
                 $loading.start('myloading');
                 $http({
                     method: 'POST',
@@ -113,6 +157,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     alert(response.statusText);
                 });
             }
+            // Close session
             $scope.Logout = function () {
                 $loading.start('myloading');
                 $http({
@@ -124,6 +169,27 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     $loading.finish('myloading');
                     if (response.data.Result == 'ok') {
                         window.location.href = '/index.html';
+                    }
+                }, function errorCallback(response) {
+                    alert(response.statusText);
+                });
+            };
+            // update messages
+            $scope.UpdateMessages = function (message) {
+                $loading.start('myloading');
+                message.messagetype2 = 'text-success';
+                message.messagetype3 = 'fa fa-check';
+                message.read = true;
+                var Data = {};
+                Data.Messages = $scope.messages;
+                $http({
+                    method: 'POST',
+                    url: '/api/UpdateMessages',
+                    headers: { 'Content-Type': 'application/json' },
+                    data: Data
+                }).then(function successCallback(response) {
+                    $loading.finish('myloading');
+                    if (response.data.Result == 'ok') {
                     }
                 }, function errorCallback(response) {
                     alert(response.statusText);

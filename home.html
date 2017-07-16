@@ -130,8 +130,8 @@
                         <div class="tab-pane active" id="home">
                             <div class="row  margen-col1">
                                 <div class="col-md-12 ">
-                                    <div ng-repeat="message in messages" ng-class="message.messagetype" role="alert">
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <div ng-repeat="message in messages | filter: {read: false } " ng-class="message.messagetype" role="alert">
+                                        <button ng-click="UpdateMessages(message);" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <strong>{{message.message}}</strong> {{message.message2}}
                                     </div>
                                 </div>
@@ -146,7 +146,7 @@
                                                     <i class="fa fa-shield"></i>
                                                 </div>
                                                 <div class="comment">Current Devices</div>
-                                                <div class="title">80</div>
+                                                <div class="title">{{devices.length}}</div>
 
                                             </div>
                                         </div>
@@ -160,7 +160,7 @@
                                                     <i class="glyphicon glyphicon-ok"></i>
                                                 </div>
                                                 <div class="comment">Past Devices</div>
-                                                <div class="title">80</div>
+                                                <div class="title">0</div>
 
                                             </div>
                                         </div>
@@ -174,7 +174,7 @@
                                                     <i class="glyphicon glyphicon-lock"></i>
                                                 </div>
                                                 <div class="comment">Close Devices</div>
-                                                <div class="title">80</div>
+                                                <div class="title">0</div>
 
                                             </div>
                                         </div>
@@ -187,8 +187,8 @@
                                                 <div class="widget-icon blue pull-left">
                                                     <i class="fa fa-lightbulb-o"></i>
                                                 </div>
-                                                <div class="comment">Recomendations</div>
-                                                <div class="title">80</div>
+                                                <div class="comment">Alert & Messages</div>
+                                                <div class="title">{{messages.length}}</div>
 
                                             </div>
                                         </div>
@@ -210,12 +210,9 @@
                                             <div class="widget-content">
                                                 <div class="table-responsive">
                                                     <table class="table">
-
                                                         <tbody>
-                                                            <tr><td>Bienvenido a sistema</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-                                                            <tr><td>Crea un dispositivo<td><span tooltip="Server Down!" class="text-danger"><i class="fa fa-warning"></i></span></td></tr>
+                                                            <tr ng-repeat="message in messages"><td>{{message.message + ' ' + message.message2}}</td><td><span ng-class="message.messagetype2"><i ng-class="message.messagetype3"></i></span></td></tr>
                                                         </tbody>
-
                                                     </table>
                                                 </div>
                                             </div>
@@ -239,12 +236,10 @@
                                                 <div class="table-responsive">
                                                     <table class="table">
                                                         <thead>
-                                                            <tr><th>Category</th><th>Make</th><th>Model</tr>
+                                                            <tr><th>File</th><th>Category</th><th>Make</th><th>Model</tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr><td>Celular</td><td>Samsung</td><td>Galaxy 6</td></tr>
-                                                            <tr><td>Celular</td><td>Samsung</td><td>Galaxy 8</td></tr>
-                                                            <tr><td>Celular</td><td>Apple</td><td>IPhone 6</td></tr>
+                                                            <tr ng-repeat="device in devices"><td><a target="_blank" ng-href='/uploads/{{device.FileName}}' class="fa fa-file"></a> </td><td>{{device.category}}</td><td>{{device.make}}</td><td>{{device.model}}</td></tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -289,7 +284,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="country"> Country:</label>
-                                                <ui-select ng-model="ctrl.country.selected" theme="selectize" ng-disabled="ctrl.disabled" title="Choose a country">
+                                                <ui-select ng-model="ctrl.country.selected" theme="bootstrap" ng-disabled="ctrl.disabled" title="Choose a country">
                                                     <ui-select-match placeholder="Select or search a country in the list...">{{$select.selected.name}}</ui-select-match>
                                                     <ui-select-choices repeat="country in ctrl.countries | filter: $select.search">
                                                         <span ng-bind-html="country.name | highlight: $select.search"></span>
@@ -325,22 +320,22 @@
                                     <div class="row">
                                         <div>
                                             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-line">
-                                                <div class="form-group">
+                                                <div ng-class="strSerialClass">
                                                     <label for="serial">Serial:</label>
                                                     <input ng-model="device.strSerial" type="text" class="form-control" id="serial" placeholder=" Enter Serial">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="sel1">Make: </label>
-                                                    <ui-select ng-change="FillModels();" ng-model="make.selected" theme="selectize" title="choose a country">
+                                                    <ui-select ng-change="FillModels();" ng-model="make.selected" theme="bootstrap" title="choose a country">
                                                         <ui-select-match placeholder="choose or find a model...">{{$select.selected.name}}</ui-select-match>
                                                         <ui-select-choices repeat="make in makes | filter: { name: $select.search } ">
                                                             <span ng-bind-html="make.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                 </div>
-                                                <div class="form-group">
+                                                <div ng-class="modelClass">
                                                     <label for="sel1">Model: </label>
-                                                    <ui-select ng-model="model.selected" theme="selectize" title="choose a country">
+                                                    <ui-select ng-model="model.selected" theme="bootstrap" title="choose a country">
                                                         <ui-select-match placeholder="choose or find a model...">{{$select.selected.name}}</ui-select-match>
                                                         <ui-select-choices repeat="model in models | filter: { name: $select.search } | filter: { makeid: make.selected.id } ">
                                                             <span ng-bind-html="model.name | highlight: $select.search"></span>
@@ -358,23 +353,23 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="sel1">Category: </label>
-                                                    <ui-select ng-change="FillSubCategories();" ng-model="category.selected" theme="selectize" title="choose a country">
+                                                    <ui-select ng-change="FillSubCategories();" ng-model="category.selected" theme="bootstrap" title="choose a country">
                                                         <ui-select-match placeholder="choose or find a country...">{{$select.selected.name}}</ui-select-match>
                                                         <ui-select-choices repeat="category in categories | filter: { name: $select.search } ">
                                                             <span ng-bind-html="category.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                 </div>
-                                                <div class="form-group">
+                                                <div ng-class="subcategoryClass">
                                                     <label for="sel1">SubCategory: </label>
-                                                    <ui-select ng-model="subcategory.selected" theme="selectize" title="choose a country">
+                                                    <ui-select ng-model="subcategory.selected" theme="bootstrap" title="choose a country">
                                                         <ui-select-match placeholder="choose or find a country...">{{$select.selected.name}}</ui-select-match>
                                                         <ui-select-choices repeat="subcategory in subcategories | filter: { name: $select.search } | filter: { categoryid: category.selected.id } ">
                                                             <span ng-bind-html="subcategory.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                 </div>
-                                                <div class="form-group">
+                                                <div ng-class="strVendorClass">
                                                     <label for="vendedor">Vendor:</label>
                                                     <input ng-model="device.strVendor" type="tel" class="form-control" id="vendedor" placeholder="Enter Vendor">
                                                 </div>
@@ -388,8 +383,9 @@
                                                 <div class="col-md-12 file-input">
                                                     <p>Fill product data, upload files (picture, pdf files, etc) and press save</p>
                                                     <!--<a href="#" class="btn btn-default btn-sm "><i class="fa fa-cloud-upload fa-3x"></i> Upload File</a>-->
-                                                    <button class="btn-file-input btn btn-default btn-sm"><i class="fa fa-cloud-upload fa-3x"></i> Upload File</button>
-                                                    <input type="file" nv-file-select uploader="uploader" multiple hidden>
+                                                    <button class="btn-file-input btn btn-default btn-sm"><i class="fa fa-cloud-upload fa-3x"></i> Upload File
+                                                        <input type="file" nv-file-select uploader="uploader" multiple hidden>
+                                                    </button>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <br>
@@ -402,10 +398,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tr ng-repeat="item in uploader.queue">
-                                                            <td>
-                                                                {{ item.file.name }}
-                                                                <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
-                                                            </td>
+                                                            <td>{{ item.file.name }}</td>
                                                             <td>{{ item.file.size/1024/1024|number:2 }} MB</td>
                                                             <td class="text-center"><a ng-click="item.remove()" href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Delete</a></td>
                                                         </tr>

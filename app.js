@@ -9,6 +9,42 @@ var cookieParser = require('cookie-parser');
 var MyMongo = require('./js/mymongo.js');
 var fileUpload = require('express-fileupload');
 var MyMail = require('./js/mails.js');
+var passport = require('passport');
+var GoogleStrategy = require('passport-google-oauth2').Strategy;
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function (user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function (obj, done) {
+    done(null, obj);
+});
+
+var GOOGLE_CLIENT_ID = "571842273805-k0dts5d0mbv7bmqmmrcb6on4kn83s8fm.apps.googleusercontent.com"
+  , GOOGLE_CLIENT_SECRET = "khF17HdaTIfFbHcAW9a-WrsC";
+
+passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    //callbackURL: "http://vps-1299884-x.dattaweb.com:8081/auth/google/callback",
+    callbackURL: "http://localhost:3000/auth/google/callback",
+    passReqToCallback: true
+},
+  function (request, accessToken, refreshToken, profile, done) {
+      process.nextTick(function () {
+          return done(null, profile);
+      });
+  }
+));
+
+app.get('/auth/google', passport.authenticate('google', {
+    scope: [
+           'https://www.googleapis.com/auth/plus.login',
+           'https://www.googleapis.com/auth/plus.profile.emails.read']
+}));
 
 const fs = require('fs');
 
@@ -89,9 +125,10 @@ app.post('/NewUserRegister', function (req, res) {
                 if (result == 'Ok') {
                     req.body.user.strPassword = 'xxxxxxxxxxxxxxxxx';
                     req.session.user = req.body.user;
-                    MyMongo.Insert('Messages', [{ email: req.session.user.strEmail, messagetype: 'alert alert-success alert-dismissible', message: req.body.user.strFirstName + ' Tranks for use us!', message2: 'Now we work for you :) ...', read: false }, { email: req.session.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', message: req.body.user.strFirstName + ' Hey!', message2: 'You dont hace any register device ...', read: false }], function (result) {
+                    MyMongo.Insert('Messages', [{ email: req.session.user.strEmail, messagetype: 'alert alert-success alert-dismissible', messagetype2: 'text-danger', messagetype3: 'fa fa-warning', message: req.body.user.strFirstName + ' Thanks for use us!', message2: 'Now we work for you :) ...', read: false }, { email: req.session.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', messagetype2: 'text-danger', messagetype3: 'fa fa-warning', message: req.body.user.strFirstName + ' Hey!', message2: 'You dont have any registered device ...', read: false }], function (result) {
                         if (result == 'Ok') {
-                            req.session.messages = [{ email: req.session.user.strEmail, messagetype: 'alert alert-success alert-dismissible', message: req.body.user.strFirstName + ' Tranks for use us!', message2: 'Now we work for you :) ...', read: false }, { email: req.session.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', message: req.body.user.strFirstName + ' Hey!', message2: 'You dont hace any register device ...', read: false }];
+                            req.session.messages = [{ email: req.session.user.strEmail, messagetype: 'alert alert-success alert-dismissible', messagetype2: 'text-danger', messagetype3: 'fa fa-warning', message: req.body.user.strFirstName + ' Thanks for use us!', message2: 'Now we work for you :) ...', read: false }, { email: req.session.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', messagetype2: 'text-danger', messagetype3: 'fa fa-warning', message: req.body.user.strFirstName + ' Hey!', message2: 'You dont have any registered device ...', read: false }];
+                            req.session.devices = [];
                             Data.Result = 'ok';
                             res.end(JSON.stringify(Data))
                         };
@@ -105,10 +142,26 @@ app.post('/NewUserRegister', function (req, res) {
 // Registrar un nuevo dispositivo
 app.post('/api/NewDeviceRegister', function (req, res) {
     var Data = {};
-    MyMongo.Insert('Devices', req.body.device, function (result) {
+    MyMongo.Insert('Devices', req.body.devices, function (result) {
         if (result == 'Ok') {
             Data.Result = 'ok';
             res.end(JSON.stringify(Data))
+        };
+    });
+});
+
+// update messages
+app.post('/api/UpdateMessages', function (req, res) {
+    var Data = {};
+    MyMongo.Remove('Messages', { 'email': req.session.user.strEmail }, function (result) {
+        if (result == 'Ok') {
+            MyMongo.Insert('Messages', req.body.Messages, function (result) {
+                if (result == 'Ok') {
+                    req.session.messages = req.body.Messages;
+                    Data.Result = 'ok';
+                    res.end(JSON.stringify(Data))
+                };
+            });
         };
     });
 });
@@ -119,7 +172,6 @@ app.post('/api/uploadFile', function (req, res) {
     sampleFile = req.files.file;
     var newPath = __dirname + "/uploads/" + sampleFile.name;
     fs.writeFile(newPath, sampleFile.data, function (err) {
-        console.log(err);
         console.log('Guardado file');
     });
 });
@@ -130,6 +182,7 @@ app.post('/api/GetInitialData', function (req, res) {
     Data.Result = "ok";
     Data.User = req.session.user;
     Data.Messages = req.session.messages;
+    Data.Devices = req.session.devices;
     res.end(JSON.stringify(Data));
 });
 
@@ -144,14 +197,39 @@ app.post('/Logon', function (req, res) {
             req.session.user = result[0];
             MyMongo.Find('Messages', { "email": req.session.user.strEmail }, function (result) {
                 req.session.messages = result;
-                Data.User = req.session.user;
-                Data.Messages = req.session.messages;
-                Data.Result = 'ok';
-                res.end(JSON.stringify(Data));
+                MyMongo.Find('Devices', { "email": req.session.user.strEmail }, function (result) {
+                    req.session.devices = result;
+                    Data.User = req.session.user;
+                    Data.Messages = req.session.messages;
+                    Data.Devices = req.session.devices;
+                    Data.Result = 'ok';
+                    res.end(JSON.stringify(Data));
+                });
             });
         }
     });
 });
+
+app.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function (req, res) {
+      MyMongo.Find('Users', { "strEmail": req.user.email }, function (result) {
+          var Data = {};
+          if (result.length == 0) {
+              res.redirect('/index.html');
+          }
+          else {
+              req.session.user = result[0];
+              MyMongo.Find('Messages', { "email": req.session.user.strEmail }, function (result) {
+                  req.session.messages = result;
+                  MyMongo.Find('Devices', { "email": req.session.user.strEmail }, function (result) {
+                      req.session.devices = result;
+                      res.redirect('/home.html');
+                  });
+              });
+          }
+      });
+  });
 
 app.post('/Login', function (req, res) {
     var mongodb = require('mongodb');
