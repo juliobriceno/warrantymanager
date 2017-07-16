@@ -6,13 +6,13 @@ module.exports = {
         var url = 'mongodb://juliobricenoro:juliobricenoro@ds153652.mlab.com:53652/warranty';
         MongoClient.connect(url, function (err, db) {
             if (err) {
-                console.log('Tremendo Error!!!!');
+                console.log(err);
             }
             else {
                 var collection = db.collection(pcollection);
                 collection.update(where, { $set: set }, function (err, result) {
                     if (err) {
-                        console.log('Tremenda ERROR compadre');
+                        console.log(err);
                     }
                     else {
                         return callback('Ok');
@@ -28,20 +28,20 @@ module.exports = {
         var url = 'mongodb://juliobricenoro:juliobricenoro@ds153652.mlab.com:53652/warranty';
         MongoClient.connect(url, function (err, db) {
             if (err) {
-                console.log('Tremendo Error!!!!');
+                console.log(err);
             }
             else {
                 var collection = db.collection(pcollection);
                 collection.update(criteria, { $set: set }, function (err, result) {
                     if (err) {
-                        console.log('Tremenda ERROR compadre');
+                        console.log(err);
                     }
                     else {
                         var collection = db.collection('Log');
                         var dataInsert = set;
                         collection.insert(dataInsert, function (err, result) {
                             if (err) {
-                                console.log('Tremenda ERROR compadre');
+                                console.log(err);
                             }
                             else {
                                 callback('Ok');
@@ -59,7 +59,7 @@ module.exports = {
         var url = 'mongodb://juliobricenoro:juliobricenoro@ds153652.mlab.com:53652/warranty'; 
         MongoClient.connect(url, function (err, db) {
             if (err) {
-                console.log('Tremendo Error!!!!');
+                console.log(err);
             }
             else {
                 var collection = db.collection(pcollection);
@@ -83,13 +83,13 @@ module.exports = {
         var url = 'mongodb://juliobricenoro:juliobricenoro@ds153652.mlab.com:53652/warranty';
         MongoClient.connect(url, function (err, db) {
             if (err) {
-                console.log('Tremendo Error!!!!');
+                console.log(err);
             }
             else {
                 var collection = db.collection(pcollection);
                 collection.insert(dataInsert, function (err, result) {
                     if (err) {
-                        console.log('Tremenda ERROR compadre');
+                        console.log(err);
                     }
                     else {
                         callback('Ok');
@@ -105,13 +105,13 @@ module.exports = {
         var url = 'mongodb://juliobricenoro:juliobricenoro@ds153652.mlab.com:53652/warranty';
         MongoClient.connect(url, function (err, db) {
             if (err) {
-                console.log('Tremendo Error!!!!');
+                console.log(err);
             }
             else {
                 var collection = db.collection(pcollection);
                 collection.remove(criteria, function (err, result) {
                     if (err) {
-                        console.log('Tremenda ERROR compadre');
+                        console.log(err);
                     }
                     else {
                         callback('Ok');

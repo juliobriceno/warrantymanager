@@ -731,13 +731,19 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         // Controlador de la ventana de modal de mensajes
         .controller('MessagesModalCtrl', function ($uibModalInstance, MessagesModalInterface) {
             var $ctrl = this;
-            $ctrl.bodyMessage = 'Device saved';
-            $ctrl.bodyTitle = 'Greate!';
-            $ctrl.ok = function () {
+            $ctrl.titleMessage = 'WApprranty says';
+            $ctrl.bodyTitleMessage = 'Greate!';
+            $ctrl.bodyMessage = 'Your device is now save';
+            $ctrl.button1Name = 'Ok';
+            $ctrl.button1Class = 'btn btn-primary btn-margen';
+            $ctrl.button2Name = '';
+            $ctrl.bodyTitleMessageClass1 = 'image-modal-green';
+            $ctrl.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
+            $ctrl.button1Click = function () {
                 $uibModalInstance.close();
             };
-            $ctrl.cancel = function () {
-                $uibModalInstance.dismiss('cancel');
+            $ctrl.button2Click = function () {
+                $uibModalInstance.close();
             };
         })
 
