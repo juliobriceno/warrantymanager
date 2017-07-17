@@ -130,7 +130,7 @@
                         <div class="tab-pane active" id="home">
                             <div class="row  margen-col1">
                                 <div class="col-md-12 ">
-                                    <div ng-repeat="message in messages track by $index | filter: {read: false } " ng-class="message.messagetype" role="alert">
+                                    <div ng-repeat="message in messages | filter: {read: false } " ng-class="message.messagetype" role="alert">
                                         <button ng-click="UpdateMessages(message);" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <strong>{{message.message}}</strong> {{message.message2}}
                                     </div>
@@ -239,7 +239,7 @@
                                                             <tr><th>File</th><th>Category</th><th>Make</th><th>Model</tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr ng-repeat="device in devices track by $index"><td><a target="_blank" ng-href='/uploads/{{device.FileName}}' class="fa fa-file"></a> </td><td>{{device.category}}</td><td>{{device.make}}</td><td>{{device.model}}</td></tr>
+                                                            <tr ng-repeat="device in devices track by $index"><td><a ng-show="device.FileName != '' " target="_blank" ng-href='/uploads/{{device.FileName}}' class="fa fa-file"></a> </td><td>{{device.category}}</td><td>{{device.make}}</td><td>{{device.model}}</td></tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -375,6 +375,8 @@
                                                 </div>
                                                 <hr>
                                                 <button ng-click="NewDeviceRegister();" type="button" class="btn btn-primary submit pull-right"><i class="fa fa-paper-plane" aria-hidden="true"></i> Save</button>
+                                                </br>
+                                                </br>
                                             </div><!-- fin form-->
 
                                         </div>

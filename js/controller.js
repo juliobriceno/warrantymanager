@@ -147,6 +147,19 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     data: Data
                 }).then(function successCallback(response) {
                     $loading.finish('myloading');
+                    $scope.messages.push({ email: $scope.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', messagetype2: 'text-danger', messagetype3: 'fa fa-warning', message: $scope.user.strFirstName + ' Hey!', message2: ' I see you have a new device :)  ...', read: false });
+                    $scope.device = {};
+                    $scope.make = {};
+                    $scope.make.selected = {};
+                    $scope.model = {};
+                    $scope.model.selected = {};
+                    $scope.category = {};
+                    $scope.category.selected = {};
+                    $scope.subcategory = {};
+                    $scope.subcategory.selected = {};
+                    $scope.device.strSerial = '';
+                    $scope.device.datDatePurchase = new Date();
+                    $scope.device.strVendor = '';
                     if (response.data.Result == 'ok') {
                         $scope.uploader.uploadAll();
                         $scope.open();
@@ -465,7 +478,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     ariaLabelledBy: 'modal-title',
                     ariaDescribedBy: 'modal-body',
                     templateUrl: 'messagemodal.html',
-                    controller: 'MessagesModalCtrl',
+                    controller: 'MessagesModalCtrlLogon',
                     controllerAs: '$ctrl',
                     size: size,
                     appendTo: parentElem,
@@ -740,6 +753,25 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $ctrl.button2Name = '';
             $ctrl.bodyTitleMessageClass1 = 'image-modal-green';
             $ctrl.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
+            $ctrl.button1Click = function () {
+                $uibModalInstance.close();
+            };
+            $ctrl.button2Click = function () {
+                $uibModalInstance.close();
+            };
+        })
+
+        // Controlador de la ventana de modal de mensajes
+        .controller('MessagesModalCtrlLogon', function ($uibModalInstance, MessagesModalInterface) {
+            var $ctrl = this;
+            $ctrl.titleMessage = 'WApprranty says';
+            $ctrl.bodyTitleMessage = 'Failed!';
+            $ctrl.bodyMessage = 'Credentials are not valid';
+            $ctrl.button1Name = 'Ok';
+            $ctrl.button1Class = 'btn btn-primary btn-margen';
+            $ctrl.button2Name = '';
+            $ctrl.bodyTitleMessageClass1 = 'image-modal-red';
+            $ctrl.bodyTitleMessageClass2 = 'fa fa-times fa-4x i-red';
             $ctrl.button1Click = function () {
                 $uibModalInstance.close();
             };

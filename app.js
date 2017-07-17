@@ -146,8 +146,14 @@ app.post('/api/NewDeviceRegister', function (req, res) {
         if (result == 'Ok') {
             MyMongo.Insert('Devices', req.body.devices, function (result) {
                 if (result == 'Ok') {
-                    Data.Result = 'ok';
-                    res.end(JSON.stringify(Data))
+                    req.session.devices = req.body.devices;
+                    MyMongo.Insert('Messages', { email: req.session.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', messagetype2: 'text-danger', messagetype3: 'fa fa-warning', message: req.session.user.strFirstName + ' Hey!', message2: ' I see you have a new device :)  ...', read: false }, function (result) {
+                        if (result == 'Ok') {
+                            req.session.messages.push({ email: req.session.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', messagetype2: 'text-danger', messagetype3: 'fa fa-warning', message: req.session.user.strFirstName + ' Hey!', message2: ' I see you have a new device :)  ...', read: false });
+                            Data.Result = 'ok';
+                            res.end(JSON.stringify(Data))
+                        };
+                    });
                 };
             });
         };
@@ -196,6 +202,7 @@ app.post('/Logon', function (req, res) {
         var Data = {};
         if (result.length == 0) {
             Data.Result = 'userDoesNotExist'
+            res.end(JSON.stringify(Data));
         }
         else {
             req.session.user = result[0];
