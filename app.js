@@ -30,7 +30,7 @@ passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
     //callbackURL: "http://vps-1299884-x.dattaweb.com:8081/auth/google/callback",
-    callbackURL: "http://localhost:3000/auth/google/callback",
+    callbackURL: "https://warrantymanager.herokuapp.com/auth/google/callback",
     passReqToCallback: true
 },
   function (request, accessToken, refreshToken, profile, done) {
