@@ -23,8 +23,8 @@ passport.deserializeUser(function (obj, done) {
     done(null, obj);
 });
 
-var GOOGLE_CLIENT_ID = "571842273805-k0dts5d0mbv7bmqmmrcb6on4kn83s8fm.apps.googleusercontent.com"
-  , GOOGLE_CLIENT_SECRET = "khF17HdaTIfFbHcAW9a-WrsC";
+var GOOGLE_CLIENT_ID = "827292123788-c239k97f0se0v2lmtr0l4gemr7085pev.apps.googleusercontent.com"
+  , GOOGLE_CLIENT_SECRET = "7-XiBka0UpwhKYAchM69Odu9";
 
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
