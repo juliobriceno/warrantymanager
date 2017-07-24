@@ -188,7 +188,6 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                         $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
                         $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
                         $scope.open();
-                        $scope.uploader.clearQueue();
                         $scope.devices = response.data.Devices;
                     }
                     else if (response.data.Result == 'userExist') {
@@ -339,6 +338,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.uploader = new FileUploader();
             $scope.uploader.url = "/api/uploadFile";
             $scope.uploader.onSuccessItem = function (item, response) {
+                $scope.uploader.clearQueue();
             }
             $scope.FillModels = function () {
                 // Lista de modelos (Fijos por traer de base de datos)

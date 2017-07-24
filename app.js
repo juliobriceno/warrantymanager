@@ -206,8 +206,8 @@ app.post('/api/uploadFile', function (req, res) {
     }
     var sampleFile;
     sampleFile = req.files.file;
-    //dir = '/uploads/' + req.session.user._id + '/'
-    dir = '/uploads/'
+    dir = '/uploads/' + req.session.user._id + '/'
+    //dir = '/uploads/'
     var newPath = __dirname + dir + sampleFile.name;
     fs.writeFile(newPath, sampleFile.data, function (err) {
         console.log('Guardado file');
