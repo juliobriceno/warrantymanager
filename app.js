@@ -199,20 +199,20 @@ app.post('/api/UpdateMessages', function (req, res) {
 
 // Subir archivos y escribirlos en disco
 app.post('/api/uploadFile', function (req, res) {
-    var fs = require('fs');
-    var dir = './uploads/' + req.session.user._id;
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-    }
-    var sampleFile;
-    sampleFile = req.files.file;
-    dir = '/uploads/' + req.session.user._id + '/'
-    //dir = '/uploads/'
-    var newPath = __dirname + dir + sampleFile.name;
-    fs.writeFile(newPath, sampleFile.data, function (err) {
-        console.log('Guardado file');
+    var mkdirp = require('mkdirp');
+    mkdirp('/uploads/' + req.session.user._id, function (err) {
+        if (err) console.error(err)
+        else {
+            var sampleFile;
+            sampleFile = req.files.file;
+            dir = '/uploads/' + req.session.user._id + '/'
+            //dir = '/uploads/'
+            var newPath = __dirname + dir + sampleFile.name;
+            fs.writeFile(newPath, sampleFile.data, function (err) {
+                console.log('Guardado file');
+            });
+        }
     });
-
 });
 
 // Obtener data inicial
