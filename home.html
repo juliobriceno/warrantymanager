@@ -130,7 +130,7 @@
                         <div class="tab-pane active" id="home">
                             <div class="row  margen-col1">
                                 <div class="col-md-12 ">
-                                    <div ng-repeat="message in messages | filter: {read: false } " ng-class="message.messagetype" role="alert">
+                                    <div ng-repeat="message in messages | orderBy:'-_id' | filter: {read: false } " ng-class="message.messagetype" role="alert">
                                         <button ng-click="UpdateMessages(message);" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <strong>{{message.message}}</strong> {{message.message2}}
                                     </div>
@@ -211,7 +211,7 @@
                                                 <div class="table-responsive">
                                                     <table class="table">
                                                         <tbody>
-                                                            <tr ng-repeat="message in messages track by $index"><td>{{message.message + ' ' + message.message2}}</td><td><span ng-class="message.messagetype2"><i ng-class="message.messagetype3"></i></span></td></tr>
+                                                            <tr ng-repeat="message in messages | orderBy:'-_id'"><td>{{message.message + ' ' + message.message2}}</td><td><span ng-class="message.messagetype2"><i ng-class="message.messagetype3"></i></span></td></tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -239,7 +239,7 @@
                                                             <tr><th>File</th><th>Category</th><th>Make</th><th>Model</tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr ng-repeat="device in devices track by $index"><td><a ng-show="device.FileName != '' " target="_blank" ng-href='/uploads/{{device.FileName}}' class="fa fa-file"></a> </td><td>{{device.category}}</td><td>{{device.make}}</td><td>{{device.model}}</td></tr>
+                                                            <tr ng-repeat="device in devices | orderBy:'-_id'"><td><a ng-show="device.FileName != '' " target="_blank" ng-href='/uploads/{{device.FileName}}' class="fa fa-file"></a> </td><td>{{device.category}}</td><td>{{device.make}}</td><td>{{device.model}}</td></tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -262,38 +262,41 @@
                                         <legend><i class="fa fa-cog"></i> My Account</legend>
 
                                         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-line">
-                                            <div class="form-group">
-                                                <label for="exampleInputUsername">First Name:</label>
-                                                <input type="text" class="form-control" id="" placeholder=" Enter Name">
+                                            <div ng-class="strFirstNameClass">
+                                                <label for="email">First name:</label>
+                                                <input ng-model="user.strFirstName" class="form-control" placeholder="">
                                             </div>
-                                            <div class="form-group">
-                                                <label for="telephone">Last Name:</label>
-                                                <input type="tel" class="form-control" id="telephone" placeholder=" Enter Last name">
+                                            <div ng-class="strLastNameClass">
+                                                <label for="password">Last name:</label>
+                                                <input ng-model="user.strLastName" class="form-control" placeholder=" ">
                                             </div>
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail">Email Address:</label>
-                                                <input type="email" class="form-control" id="exampleInputEmail" placeholder="Enter Email id">
+                                            <div ng-class="strEmailClass">
+                                                <label for="password">Email Address:</label>
+                                                <input ng-model="user.strEmail" class="form-control" placeholder=" ">
                                             </div>
-                                            <div class="form-group">
-                                                <label for="telephone">Password:</label>
-                                                <input type="tel" class="form-control" id="telephone" placeholder="Enter Password">
+                                            <div ng-class="strPasswordClass">
+                                                <label for="password">Password:</label>
+                                                <input ng-model="user.strPassword" type="password" class="form-control" placeholder=" ">
                                             </div>
-                                            <div class="form-group">
-                                                <label for="telephone">Phone Number:</label>
-                                                <input type="tel" class="form-control" id="telephone" placeholder="Enter Phone number">
+                                            <div ng-class="strPasswordClass">
+                                                <label for="password">Confirm Password:</label>
+                                                <input ng-model="user.strConfirmPassword" type="password" class="form-control" placeholder=" ">
                                             </div>
-                                            <div class="form-group">
-                                                <label for="country"> Country:</label>
-                                                <ui-select ng-model="ctrl.country.selected" theme="bootstrap" ng-disabled="ctrl.disabled" title="Choose a country">
-                                                    <ui-select-match placeholder="Select or search a country in the list...">{{$select.selected.name}}</ui-select-match>
-                                                    <ui-select-choices repeat="country in ctrl.countries | filter: $select.search">
+                                            <div ng-class="strPhoneNumberClass">
+                                                <label for="password">Phone Number:</label>
+                                                <input ng-model="user.strPhoneNumber" class="form-control" placeholder=" ">
+                                            </div>
+                                            <div ng-class="strCountryClass">
+                                                <label for="sel1">Country: </label>
+                                                <ui-select ng-model="user.country" theme="bootstrap" title="choose a country">
+                                                    <ui-select-match placeholder="choose or find a country...">{{$select.selected.name}}</ui-select-match>
+                                                    <ui-select-choices repeat="country in countries | filter: { name: $select.search } ">
                                                         <span ng-bind-html="country.name | highlight: $select.search"></span>
-                                                        <small ng-bind-html="country.code | highlight: $select.search"></small>
                                                     </ui-select-choices>
                                                 </ui-select>
                                             </div>
                                             <hr>
-                                            <button type="button" class="btn btn-primary submit pull-right"><i class="fa fa-paper-plane" aria-hidden="true"></i> Save</button>
+                                            <button ng-click="UpdateUser();" type="button" class="btn btn-primary submit pull-right"><i class="fa fa-paper-plane" aria-hidden="true"></i> Save</button>
                                         </div><!-- fin form-->
 
                                         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -312,6 +315,8 @@
                             </div>
 
                         </div>
+
+                        </br>
 
                         <div class="tab-pane" id="register-device">
                             <div class="container-fluid">

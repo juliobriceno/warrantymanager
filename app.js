@@ -30,7 +30,7 @@ passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
     //callbackURL: "http://vps-1299884-x.dattaweb.com:8081/auth/google/callback",
-    callbackURL: "https://warrantymanager.herokuapp.com/auth/google/callback",
+    callbackURL: "http://localhost:3000/auth/google/callback",
     passReqToCallback: true
 },
   function (request, accessToken, refreshToken, profile, done) {
@@ -123,7 +123,6 @@ app.post('/NewUserRegister', function (req, res) {
         else {
             MyMongo.Insert('Users', req.body.user, function (result) {
                 if (result == 'Ok') {
-                    req.body.user.strPassword = 'xxxxxxxxxxxxxxxxx';
                     req.session.user = req.body.user;
                     MyMongo.Insert('Messages', [{ email: req.session.user.strEmail, messagetype: 'alert alert-success alert-dismissible', messagetype2: 'text-danger', messagetype3: 'fa fa-warning', message: req.body.user.strFirstName + ' Thanks for use us!', message2: 'Now we work for you :) ...', read: false }, { email: req.session.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', messagetype2: 'text-danger', messagetype3: 'fa fa-warning', message: req.body.user.strFirstName + ' Hey!', message2: 'You dont have any registered device ...', read: false }], function (result) {
                         if (result == 'Ok') {
@@ -139,6 +138,22 @@ app.post('/NewUserRegister', function (req, res) {
     });
 });
 
+// Update user
+app.post('/api/UpdateUser', function (req, res) {
+    var Data = {};
+    MyMongo.Remove('Users', { 'strEmail': req.body.user.strEmail }, function (result) {
+        if (result == 'Ok') {
+            MyMongo.Insert('Users', req.body.user, function (result) {
+                if (result == 'Ok') {
+                    Data.Result = 'ok';
+                    req.session.user = req.body.user;
+                    res.end(JSON.stringify(Data))
+                };
+            });
+        };
+    });
+});
+
 // Registrar un nuevo dispositivo
 app.post('/api/NewDeviceRegister', function (req, res) {
     var Data = {};
@@ -149,10 +164,16 @@ app.post('/api/NewDeviceRegister', function (req, res) {
                     req.session.devices = req.body.devices;
                     MyMongo.Insert('Messages', { email: req.session.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', messagetype2: 'text-danger', messagetype3: 'fa fa-warning', message: req.session.user.strFirstName + ' Hey!', message2: ' I see you have a new device :)  ...', read: false }, function (result) {
                         if (result == 'Ok') {
-                            req.session.messages.push({ email: req.session.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', messagetype2: 'text-danger', messagetype3: 'fa fa-warning', message: req.session.user.strFirstName + ' Hey!', message2: ' I see you have a new device :)  ...', read: false });
-                            Data.Result = 'ok';
-                            res.end(JSON.stringify(Data))
-                        };
+                            MyMongo.Find('Devices', { email: req.session.user.strEmail }, function (result) {
+                                Data.Devices = result;
+                                MyMongo.Find('Messages', { email: req.session.user.strEmail }, function (result) {
+                                    Data.Messages = result;
+                                    req.session.messages = Data.Messages;
+                                    Data.Result = 'ok';
+                                    res.end(JSON.stringify(Data))
+                                })
+                            })
+                        }
                     });
                 };
             });
@@ -178,12 +199,19 @@ app.post('/api/UpdateMessages', function (req, res) {
 
 // Subir archivos y escribirlos en disco
 app.post('/api/uploadFile', function (req, res) {
+    var fs = require('fs');
+    var dir = './uploads/' + req.session.user._id;
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+    }
     var sampleFile;
     sampleFile = req.files.file;
-    var newPath = __dirname + "/uploads/" + sampleFile.name;
+    dir = '/uploads/' + req.session.user._id + '/'
+    var newPath = __dirname + dir + sampleFile.name;
     fs.writeFile(newPath, sampleFile.data, function (err) {
         console.log('Guardado file');
     });
+
 });
 
 // Obtener data inicial
