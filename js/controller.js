@@ -341,6 +341,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 if ($scope.QuantityFiles == 1) {
                     $scope.uploader.clearQueue();
                     $loading.finish('myloading');
+                    $scope.devices = response.Devices;
                     $scope.MessagesModalInterface.titleMessage = 'WApprranty says';
                     $scope.MessagesModalInterface.bodyTitleMessage = 'Greate!';
                     $scope.MessagesModalInterface.bodyMessage = 'Your Device Warranty is safed now!';

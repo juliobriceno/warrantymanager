@@ -238,10 +238,13 @@ app.post('/api/uploadFile', function (req, res) {
             MyMongo.Find('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.DeviceActiveSerial } ] }, function (result) {
                 var NewFiles = result[0].Files;
                 NewFiles.push({ FilewebViewLink: file.webViewLink, FileName: sampleFile.name, FilethumbnailLink: file.thumbnailLink });
-                MyMongo.UpdateCriteria('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.DeviceActiveSerial } ] }, { Files: NewFiles }, function (resp) {
-                    Data.Result = 'ok';
-                    res.end(JSON.stringify(Data))
-                    console.log(file.id);
+                MyMongo.UpdateCriteria('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.DeviceActiveSerial }] }, { Files: NewFiles }, function (resp) {
+                    MyMongo.Find('Devices', { email: req.session.user.strEmail }, function (result) {
+                        Data.Result = 'ok';
+                        Data.Devices = result;
+                        res.end(JSON.stringify(Data))
+                        console.log(file.id);
+                    });
                 });
             });
 
