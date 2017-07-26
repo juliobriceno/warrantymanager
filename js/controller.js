@@ -87,6 +87,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.strCountryClass = 'form-group';
             $scope.strEmailLogonClass = 'form-group';
             $scope.strPasswordLogonClass = 'form-group';
+            $scope.DeviceActiveSerial = '';
             // Get Initial Data
             $scope.GetInitialData = function () {
                 $loading.start('myloading');
@@ -150,6 +151,8 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 DataDevice.device.category = $scope.category.selected.name;
                 DataDevice.device.email = $scope.user.strEmail;
                 DataDevice.device.FileName = '';
+                DataDevice.device.Files = [];
+                $scope.DeviceActiveSerial = $scope.device.strSerial;
                 if ($scope.uploader.queue.length > 0) {
                     DataDevice.device.FileName = $scope.uploader.queue[0].file.name;
                 }
@@ -163,7 +166,6 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     headers: { 'Content-Type': 'application/json' },
                     data: Data
                 }).then(function successCallback(response) {
-                    $loading.finish('myloading');
                     $scope.messages.push({ email: $scope.user.strEmail, messagetype: 'alert alert-danger alert-dismissible', messagetype2: 'text-danger', messagetype3: 'fa fa-warning', message: $scope.user.strFirstName + ' Hey!', message2: ' I see you have a new device :)  ...', read: false });
                     $scope.device = {};
                     $scope.make = {};
@@ -179,15 +181,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     $scope.device.strVendor = '';
                     if (response.data.Result == 'ok') {
                         $scope.uploader.uploadAll();
-                        $scope.MessagesModalInterface.titleMessage = 'WApprranty says';
-                        $scope.MessagesModalInterface.bodyTitleMessage = 'Greate!';
-                        $scope.MessagesModalInterface.bodyMessage = 'Your Device Warranty is safed now!';
-                        $scope.MessagesModalInterface.button1Name = 'Ok';
-                        $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
-                        $scope.MessagesModalInterface.button2Name = '';
-                        $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
-                        $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
-                        $scope.open();
+                        $scope.QuantityFiles = $scope.uploader.queue.length;
                         $scope.devices = response.data.Devices;
                     }
                     else if (response.data.Result == 'userExist') {
@@ -335,10 +329,29 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 return re.test(email);
             }
+            $scope.QuantityFiles = 0;
             $scope.uploader = new FileUploader();
             $scope.uploader.url = "/api/uploadFile";
+            $scope.uploader.onBeforeUploadItem = function (item) {
+                var Data = {};
+                Data.DeviceActiveSerial = $scope.DeviceActiveSerial;
+                item.formData.push(Data);
+            };
             $scope.uploader.onSuccessItem = function (item, response) {
-                $scope.uploader.clearQueue();
+                if ($scope.QuantityFiles == 1) {
+                    $scope.uploader.clearQueue();
+                    $loading.finish('myloading');
+                    $scope.MessagesModalInterface.titleMessage = 'WApprranty says';
+                    $scope.MessagesModalInterface.bodyTitleMessage = 'Greate!';
+                    $scope.MessagesModalInterface.bodyMessage = 'Your Device Warranty is safed now!';
+                    $scope.MessagesModalInterface.button1Name = 'Ok';
+                    $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
+                    $scope.MessagesModalInterface.button2Name = '';
+                    $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
+                    $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
+                    $scope.open();
+                }
+                $scope.QuantityFiles--;
             }
             $scope.FillModels = function () {
                 // Lista de modelos (Fijos por traer de base de datos)

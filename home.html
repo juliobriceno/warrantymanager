@@ -97,18 +97,7 @@
                                     <a href="#register-device" data-toggle="tab"><i class="glyphicon glyphicon-edit fa-lg"></i> Register Device</a>
                                 </li>
                                 <li>
-                                    <a href="#" data-toggle="collapse" data-target="#submenu-1"><i class=" fa fa-microchip fa-lg"></i> My Devices<i class="fa fa-fw fa-angle-down pull-right"></i></a>
-                                    <ul id="submenu-1" class="collapse">
-                                        <li>
-                                            <a href="#current-device" data-toggle="tab"><i class="fa fa-angle-double-right fa-lg"></i> Current devices </a>
-                                        </li>
-                                        <li>
-                                            <a href="#past-devices" data-toggle="tab"><i class="fa fa-angle-double-right fa-lg"></i> Past devices</a>
-                                        </li>
-                                        <li>
-                                            <a href="#close-devices" data-toggle="tab"><i class="fa fa-angle-double-right fa-lg"></i> Warranty close devices</a>
-                                        </li>
-                                    </ul>
+                                    <a href="#current-device" data-toggle="tab"><i class="fa fa-list-alt fa-lg"></i> My devices </a>
                                 </li>
                                 <li>
                                     <a href="#recomendations" data-toggle="tab"><i class="fa fa-lightbulb-o fa-lg"></i> Recomendations</a>
@@ -419,13 +408,43 @@
                             </div>
                         </div>
 
-
-
                         <div class="tab-pane" id="current-device">
-                            <div class="container well">
-                                <h1>TAB3</h1>
-                            </div>
-                        </div>
+                            <div class="container-fluid">
+                                <div class="row margen-col1">
+                                    <legend><i class="fa fa-cog"></i> Current Devices</legend>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped" style="border:none;">
+                                                    <tr ng-repeat="device in devices | orderBy:'-_id'">
+                                                        <td class="col-md-5">
+                                                            <div class="media">
+                                                                <div class="media-body ">
+                                                                    <h4><a href="#">{{device.category + ' - ' + device.make + ' - ' + device.model }}</a></h4>
+                                                                    <div class="pull-left">
+                                                                        <h6><span class="fa fa-barcode"></span><b> Serial:</b> {{device.strSerial}}</h6>
+                                                                        <h6><span class="fa fa-calendar-check-o"></span><b> Date of Purchase:</b> {{device.datDatePurchase}}</h6>
+                                                                        <h6><span class="fa fa-handshake-o"></span><b> Vendor </b> {{device.strVendor}}</h6>
+                                                                    </div>
+                                                                </div> <!--fin media body-->
+                                                            </div><!--fin media-->
+                                                        </td> <!--fin td col-md5-->
+                                                        <td class="col-md-3 text-center"></td>
+                                                        <td class="col-sm-3 col-md-4">
+                                                            <h4><a href="#">Files</a></h4>
+                                                            <div class="list-file">
+                                                                <span ng-repeat="file in device.Files" class="fa fa-file list-item-file"><a target="_blank" href="{{file.FilewebViewLink}}"> {{file.FileName}}</a> <a target="_blank" href="{{file.FilewebViewLink}}"><span class="btn  btn-sm fa fa-arrow-circle-o-down pull-right"></span></span></a>
+                                                            </div><!--fin list file-->
+                                                        </td><!--fin td-->
+                                                    </tr><!--fin tr-->
+                                                </table><!--fin table-->
+                                            </div><!--fin table-->
+                                        </div><!--finpanel body-->
+                                    </div><!--fin panel default-->
+                                </div><!--fin row-->
+                            </div><!--fin container current devices-->
+                        </div> <!--fin de tabs fichas de dispositivos Current  -->
+
                         <div class="tab-pane" id="past-devices">
                             <div class="container well">
                                 <h1>TAB4</h1>

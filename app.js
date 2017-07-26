@@ -11,6 +11,7 @@ var fileUpload = require('express-fileupload');
 var MyMail = require('./js/mails.js');
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var google = require('googleapis');
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -25,6 +26,20 @@ passport.deserializeUser(function (obj, done) {
 
 var GOOGLE_CLIENT_ID = "827292123788-c239k97f0se0v2lmtr0l4gemr7085pev.apps.googleusercontent.com"
   , GOOGLE_CLIENT_SECRET = "7-XiBka0UpwhKYAchM69Odu9";
+
+var googleapis = require('googleapis')
+  , drive = googleapis.drive('v3')
+
+var key = require('./path/serviceaccount.json');
+
+var jwtClient = new googleapis.auth.JWT(
+  key.client_email,
+  null,
+  key.private_key,
+  ['https://www.googleapis.com/auth/drive'
+  ],
+  null
+);
 
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
@@ -199,18 +214,38 @@ app.post('/api/UpdateMessages', function (req, res) {
 
 // Subir archivos y escribirlos en disco
 app.post('/api/uploadFile', function (req, res) {
-    var mkdirp = require('mkdirp');
-    mkdirp('/uploads/' + req.session.user._id, function (err) {
-        if (err) console.error(err)
-        else {
-            var sampleFile;
-            sampleFile = req.files.file;
-            dir = '/uploads/' + req.session.user._id + '/'
-            //dir = '/uploads/'
-            var newPath = __dirname + dir + sampleFile.name;
-            fs.writeFile(newPath, sampleFile.data, function (err) {
-                console.log('Guardado file');
+    var Data = {};
+    var sampleFile;
+    sampleFile = req.files.file;
+    var fileMetadata = {
+        'name': sampleFile.name,
+        parents: ['0B2_PIECATjTWaHNxOGd2cjhSRnc']
+    };
+    var media = {
+        mimeType: sampleFile.mimetype,
+        body: sampleFile.data
+    };
+    drive.files.create({
+        auth: jwtClient,
+        resource: fileMetadata,
+        media: media,
+        fields: 'id, webContentLink, webViewLink, thumbnailLink'
+    }, function (err, file) {
+        if (err) {
+            console.log(err);
+        } else {
+
+            MyMongo.Find('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.DeviceActiveSerial } ] }, function (result) {
+                var NewFiles = result[0].Files;
+                NewFiles.push({ FilewebViewLink: file.webViewLink, FileName: sampleFile.name, FilethumbnailLink: file.thumbnailLink });
+                MyMongo.UpdateCriteria('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.DeviceActiveSerial } ] }, { Files: NewFiles }, function (resp) {
+                    Data.Result = 'ok';
+                    res.end(JSON.stringify(Data))
+                    console.log(file.id);
+                });
             });
+
+
         }
     });
 });

@@ -12,7 +12,6 @@
    
 }
 
-
 @media(min-width:768px) {
     #contenido {
         padding-left: 225px;
@@ -317,4 +316,15 @@
   background: white;
   cursor: inherit;
   display: block;
+}
+
+.list-file{
+ padding:0px !important;
+ margin-bottom: 20px !important;
+}
+
+.list-item-file{
+  display: block !important;
+  border: 1px solid #ddd !important;
+  padding: 10px 15px !important;
 }
