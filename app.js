@@ -253,14 +253,30 @@ app.post('/api/uploadFile', function (req, res) {
     });
 });
 
+app.post('/api/DeactivateDevice', function (req, res) {
+    MyMongo.UpdateCriteria('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.strSerial }] }, { Status: 'Deactivated' }, function (resp) {
+        var Data = {};
+        Data.Result = "ok";
+        res.end(JSON.stringify(Data));
+    });
+});
+
 // Obtener data inicial
 app.post('/api/GetInitialData', function (req, res) {
-    var Data = {};
-    Data.Result = "ok";
-    Data.User = req.session.user;
-    Data.Messages = req.session.messages;
-    Data.Devices = req.session.devices;
-    res.end(JSON.stringify(Data));
+    // Obtiene los usuarios para poder transferir la data
+    MyMongo.Find('Users', {}, function (result) {
+        var Data = {};
+        Data.Result = "ok";
+        Data.User = req.session.user;
+        Data.Messages = req.session.messages;
+        var transferusers = [];
+        result.forEach(function (element) {
+            transferusers.push({email: element.strEmail});
+        });
+        Data.transferusers = transferusers;
+        Data.Devices = req.session.devices;
+        res.end(JSON.stringify(Data));
+    });
 });
 
 // Login del usuario
@@ -498,13 +514,22 @@ app.post('/RecoverPassword', function (req, res) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
 
-    MyMongo.Update('Users', { 'Email': req.body.Email }, { 'Password': text }, function (result) {
+    MyMongo.Update('Users', { 'strEmail': req.body.userLogon.strEmail }, { 'strPassword': text, 'strConfirmPassword': text }, function (result) {
         if (result == 'Ok') {
-            MyMail.SendEmail("<p>&nbsp;</p><p>Hola!</p><p>Solicitaste una nueva clave de acceso a Encu&eacute;ntralo. Hemos generado una al azar, la cual es: <strong>" + text + "</strong>  </p><p>Las mejores ventas!</p><p>&nbsp;</p>", req.body.Email, "Nueva clave de acceso a Encuentralo.");
+
+            var msg = "<table style='max-width: 600px; padding: 10px; margin:0 auto; border-collapse: collapse;'><tr><td style='background-color: #fff; text-align: left; padding: 0;'><img width='20%' style='display:block; margin: 2% 3%' src=''></a></td></tr><tr><td style='padding: 0'></td></tr><tr><td style='background-color: #fff'><div style='color: #34495e; text-align: justify;font-family: sans-serif'><div style='color: #fff; margin: 0 0 5%; text-align:center; height: 120px; background-color: #3498db; padding: 4% 10% 2%; font-size: 23px;'><b>La nueva clave de su usuario para acceso al portal Incorp es: <label>" + text + "</label> </b> <br><br><a href=''></a></b></div><p style='margin: 2%px; font-size: 15px; margin: 4% 10% 2%;'><br></p><div style='width: 100%;margin:20px 0; display: inline-block;text-align: center'></div><div style='width: 100%; text-align: center'><a style='text-decoration: none; border-radius: 5px; padding: 11px 23px; color: white; background-color: #3498db' href='http://vps-1299884-x.dattaweb.com:8081'>Ir al <b>Portal</b></a></div><p style='color: #b3b3b3; font-size: 12px; text-align: center;margin: 30px 0 0; padding:20px 0 0;  background-color:#3498db; height: 30px'>Portal del cliente Incorp.</p></div></td></tr></table>";
+
+            MyMail.SendEmail(msg, req.body.userLogon.strEmail, "Solicitó una nueva clave para WApprranty.");
+
             var Data = {};
             Data.Result = 'Ok';
             res.end(JSON.stringify(Data))
-        };
+        }
+        else {
+            var Data = {};
+            Data.Result = 'userDoesNotExist';
+            res.end(JSON.stringify(Data))
+        }
     }
     );
 

@@ -9,6 +9,8 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
       <!-- *****************************************Bootstrap.Estilos***************************************** -->
       <link rel="stylesheet" href="css/bootstrap.min.css" /><!--enlace bootstrap -->
+      <!-- *****************************************Lists***************************************** -->
+      <script src="js/Lists.js"></script>
       <!-- *****************************************JQuery***************************************** -->
       <script src="js/jquery.js"></script>
       <!-- *****************************************Bootstrap.Códigos***************************************** -->
@@ -91,16 +93,13 @@
                         <div class="collapse navbar-collapse" id="nav1">
                             <ul id="tabs" class="nav navbar-nav side-menu " data-tabs="tabs">
                                 <li>
-                                    <a href="#home" data-toggle="tab"><i class="fa fa-home fa-lg" aria-hidden="true"></i> Home</a>
+                                    <a ng-click="SetHomeDevices();" href="#home" data-toggle="tab"><i class="fa fa-home fa-lg" aria-hidden="true"></i> Home</a>
                                 </li>
                                 <li>
                                     <a href="#register-device" data-toggle="tab"><i class="glyphicon glyphicon-edit fa-lg"></i> Register Device</a>
                                 </li>
                                 <li>
-                                    <a href="#current-device" data-toggle="tab"><i class="fa fa-list-alt fa-lg"></i> My devices </a>
-                                </li>
-                                <li>
-                                    <a href="#recomendations" data-toggle="tab"><i class="fa fa-lightbulb-o fa-lg"></i> Recomendations</a>
+                                    <a ng-click="SetListDevice();" href="#current-device" data-toggle="tab"><i class="fa fa-list-alt fa-lg"></i> My devices </a>
                                 </li>
                                 <li class="">
                                     <a href="#my-register" data-toggle="tab"><i class="fa fa-cog fa-lg"></i> My Account</a>
@@ -215,7 +214,7 @@
                                             <i class="fa fa-tasks"></i>
                                             List Devices
                                             <div class="pull-right">
-                                                <input type="text" placeholder="Search" class="form-control input-sm" />
+                                                <input ng-model="strSearchDevice" ng-change="SearchDevices();" type="text" placeholder="Search" class="form-control input-sm" />
                                             </div>
                                         </div> <!-- fin widget header-->
 
@@ -228,7 +227,7 @@
                                                             <tr><th>File</th><th>Category</th><th>Make</th><th>Model</tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr ng-repeat="device in devices | orderBy:'-_id'"><td><a ng-show="device.FileName != '' " target="_blank" ng-href='/uploads/{{device.FileName}}' class="fa fa-file"></a> </td><td>{{device.category}}</td><td>{{device.make}}</td><td>{{device.model}}</td></tr>
+                                                            <tr ng-repeat="device in devicesfiltered | orderBy:'-_id'"><td><a ng-show="device.FileName != '' " target="_blank" ng-href='/uploads/{{device.FileName}}' class="fa fa-file"></a> </td><td>{{device.category.name}}</td><td>{{device.make.name}}</td><td>{{device.model.name}}</td></tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -318,9 +317,28 @@
                                                     <label for="serial">Serial:</label>
                                                     <input ng-model="device.strSerial" type="text" class="form-control" id="serial" placeholder=" Enter Serial">
                                                 </div>
+
+                                                <div class="form-group">
+                                                    <label for="sel1">Category: </label>
+                                                    <ui-select ng-change="FillSubCategories();" ng-model="device.category" theme="bootstrap" title="choose a country">
+                                                        <ui-select-match placeholder="choose or find a country...">{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices repeat="category in categories | filter: { name: $select.search } ">
+                                                            <span ng-bind-html="category.name | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                                <div ng-class="subcategoryClass">
+                                                    <label for="sel1">SubCategory: </label>
+                                                    <ui-select ng-model="device.subcategory" theme="bootstrap" title="choose a country">
+                                                        <ui-select-match placeholder="choose or find a country...">{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices repeat="subcategory in subcategories | filter: { name: $select.search } | filter: { categoryid: device.category.id } ">
+                                                            <span ng-bind-html="subcategory.name | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
                                                 <div class="form-group">
                                                     <label for="sel1">Make: </label>
-                                                    <ui-select ng-change="FillModels();" ng-model="make.selected" theme="bootstrap" title="choose a country">
+                                                    <ui-select ng-change="FillModels();" ng-model="device.make" theme="bootstrap" title="choose a country">
                                                         <ui-select-match placeholder="choose or find a model...">{{$select.selected.name}}</ui-select-match>
                                                         <ui-select-choices repeat="make in makes | filter: { name: $select.search } ">
                                                             <span ng-bind-html="make.name | highlight: $select.search"></span>
@@ -329,10 +347,19 @@
                                                 </div>
                                                 <div ng-class="modelClass">
                                                     <label for="sel1">Model: </label>
-                                                    <ui-select ng-model="model.selected" theme="bootstrap" title="choose a country">
+                                                    <ui-select ng-model="device.model" theme="bootstrap" title="choose a country">
                                                         <ui-select-match placeholder="choose or find a model...">{{$select.selected.name}}</ui-select-match>
-                                                        <ui-select-choices repeat="model in models | filter: { name: $select.search } | filter: { makeid: make.selected.id } ">
+                                                        <ui-select-choices repeat="model in models | filter: { name: $select.search } | filter: { makeid: device.make.id } ">
                                                             <span ng-bind-html="model.name | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                                <div ng-class="warantyClass">
+                                                    <label for="sel1">Warranty time: </label>
+                                                    <ui-select ng-model="device.warrantytime" theme="bootstrap" title="choose a warranty time">
+                                                        <ui-select-match placeholder="choose or find a warranty time...">{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices repeat="warratytime in WarratyTimes | filter: { name: $select.search } ">
+                                                            <span ng-bind-html="warratytime.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                 </div>
@@ -344,24 +371,6 @@
                                                             <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
                                                         </span>
                                                     </p>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="sel1">Category: </label>
-                                                    <ui-select ng-change="FillSubCategories();" ng-model="category.selected" theme="bootstrap" title="choose a country">
-                                                        <ui-select-match placeholder="choose or find a country...">{{$select.selected.name}}</ui-select-match>
-                                                        <ui-select-choices repeat="category in categories | filter: { name: $select.search } ">
-                                                            <span ng-bind-html="category.name | highlight: $select.search"></span>
-                                                        </ui-select-choices>
-                                                    </ui-select>
-                                                </div>
-                                                <div ng-class="subcategoryClass">
-                                                    <label for="sel1">SubCategory: </label>
-                                                    <ui-select ng-model="subcategory.selected" theme="bootstrap" title="choose a country">
-                                                        <ui-select-match placeholder="choose or find a country...">{{$select.selected.name}}</ui-select-match>
-                                                        <ui-select-choices repeat="subcategory in subcategories | filter: { name: $select.search } | filter: { categoryid: category.selected.id } ">
-                                                            <span ng-bind-html="subcategory.name | highlight: $select.search"></span>
-                                                        </ui-select-choices>
-                                                    </ui-select>
                                                 </div>
                                                 <div ng-class="strVendorClass">
                                                     <label for="vendedor">Vendor:</label>
@@ -412,19 +421,26 @@
                             <div class="container-fluid">
                                 <div class="row margen-col1">
                                     <legend><i class="fa fa-cog"></i> Current Devices</legend>
+                                    <input class="form-control" ng-model="strSearchDeviceList" ng-change="SearchDevicesList();" type="text"><br>
+                                    <input type="checkbox" name="your-group" value="unit-in-group" />Current Devices
+                                    <input type="checkbox" name="your-group" value="unit-in-group" />Past Devices
+                                    <input type="checkbox" name="your-group" value="unit-in-group" />Close Devices
                                     <div class="panel panel-default">
                                         <div class="panel-body">
                                             <div class="table-responsive">
                                                 <table class="table table-striped" style="border:none;">
-                                                    <tr ng-repeat="device in devices | orderBy:'-_id'">
+                                                    <tr ng-repeat="device in deviceslistfiltered | orderBy:'-_id'">
                                                         <td class="col-md-5">
                                                             <div class="media">
                                                                 <div class="media-body ">
-                                                                    <h4><a href="#">{{device.category + ' - ' + device.make + ' - ' + device.model }}</a></h4>
+                                                                    <h4><a href="#">{{device.category.name + ' - ' + device.make.name + ' - ' + device.model.name }}</a></h4>
                                                                     <div class="pull-left">
                                                                         <h6><span class="fa fa-barcode"></span><b> Serial:</b> {{device.strSerial}}</h6>
-                                                                        <h6><span class="fa fa-calendar-check-o"></span><b> Date of Purchase:</b> {{device.datDatePurchase}}</h6>
+                                                                        <h6><span class="fa fa-calendar-check-o"></span><b> Date of Purchase:</b> {{device.datDatePurchase | date:'MM/dd/yyyy'}} </h6>
                                                                         <h6><span class="fa fa-handshake-o"></span><b> Vendor </b> {{device.strVendor}}</h6>
+                                                                        <button class="btn btn-primary" ng-click="DeactivateDevice(device);" type="button">Deactivate</button>
+                                                                        <input type="text" ng-model="selected" uib-typeahead="transferuser.email for transferuser in transferusers | filter:$viewValue | limitTo:8" class="form-control">
+                                                                        <button class="btn btn-primary" ng-click="TransferDevice(device);" type="button">Transfer</button>
                                                                     </div>
                                                                 </div> <!--fin media body-->
                                                             </div><!--fin media-->
@@ -451,11 +467,6 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="close-devices">
-                            <div class="container well">
-                                <h1>TAB5</h1>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="recomendations">
                             <div class="container well">
                                 <h1>TAB5</h1>
                             </div>

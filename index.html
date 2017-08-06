@@ -9,6 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <!-- *****************************************Bootstrap.Estilos***************************************** -->
     <link rel="stylesheet" href="css/bootstrap.min.css"/><!--enlace bootstrap -->
+    <!-- *****************************************Lists***************************************** -->
+    <script src="js/Lists.js"></script>
     <!-- *****************************************JQuery***************************************** -->
     <script src="js/jquery.js"></script> 
     <!-- *****************************************Bootstrap.Códigos***************************************** -->
@@ -75,7 +77,7 @@
                                 </div>
                                 <button ng-click="Logon();" class="btn btn-primary btn-block">Sign In</button>
                                 <div class="text-password">
-                                    <p>forgot your password? <a href="#">click here</a></p>
+                                    <p>forgot your password? <a ng-click="RecoverPassword();" href="#">click here</a></p>
                                 </div>
                                 <hr>
                                 <div class="text-center">
