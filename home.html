@@ -438,9 +438,9 @@
                                                                         <h6><span class="fa fa-barcode"></span><b> Serial:</b> {{device.strSerial}}</h6>
                                                                         <h6><span class="fa fa-calendar-check-o"></span><b> Date of Purchase:</b> {{device.datDatePurchase | date:'MM/dd/yyyy'}} </h6>
                                                                         <h6><span class="fa fa-handshake-o"></span><b> Vendor </b> {{device.strVendor}}</h6>
-                                                                        <button class="btn btn-primary" ng-click="DeactivateDevice(device);" type="button">Deactivate</button>
-                                                                        <input type="text" ng-model="selected" uib-typeahead="transferuser.email for transferuser in transferusers | filter:$viewValue | limitTo:8" class="form-control">
-                                                                        <button class="btn btn-primary" ng-click="TransferDevice(device);" type="button">Transfer</button>
+                                                                        <button class="btn btn-primary" ng-click="CallConfirmDeactivate(device);" type="button">Deactivate</button>
+                                                                        <input type="text" ng-model="device.strEmailTransfer" uib-typeahead="transferuser.email for transferuser in transferusers | filter:$viewValue | limitTo:8" class="form-control">
+                                                                        <button class="btn btn-primary" ng-click="CallConfirmTransfer(device);" type="button">Transfer</button>
                                                                     </div>
                                                                 </div> <!--fin media body-->
                                                             </div><!--fin media-->

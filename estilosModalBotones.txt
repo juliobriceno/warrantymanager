@@ -12,8 +12,10 @@ $scope.MessagesModalInterface.button2Name = '';
 $scope.MessagesModalInterface.bodyTitleMessage = 'Oops!';
 $scope.MessagesModalInterface.bodyMessage = 'This account was taken!';
 $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen / btn btn-default btn-margen';
-                        $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green / image-modal-red';
-                        $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green / fa fa-times fa-4x i-red';
+                        
+$scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green / image-modal-red';
+                        
+$scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green / fa fa-times fa-4x i-red';
 
 
 

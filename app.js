@@ -253,8 +253,18 @@ app.post('/api/uploadFile', function (req, res) {
     });
 });
 
+// Desactivar dispositivo
 app.post('/api/DeactivateDevice', function (req, res) {
     MyMongo.UpdateCriteria('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.strSerial }] }, { Status: 'Deactivated' }, function (resp) {
+        var Data = {};
+        Data.Result = "ok";
+        res.end(JSON.stringify(Data));
+    });
+});
+
+// Transferir dispositivo
+app.post('/api/TransferDevice', function (req, res) {
+    MyMongo.UpdateCriteria('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.strSerial }] }, { email: req.body.strEmailTransfer }, function (resp) {
         var Data = {};
         Data.Result = "ok";
         res.end(JSON.stringify(Data));

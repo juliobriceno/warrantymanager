@@ -5,6 +5,8 @@ angular.element(function() {
 angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngTagsInput', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.select'])
 
         .controller('ctrlWarrantyHome', ['$scope', '$http', '$loading', '$uibModal', 'FileUploader', function ($scope, $http, $loading, $uibModal, FileUploader) {
+            // Base de data
+            $scope.data = {};
             // Valores por defecto de modales
             $scope.MessagesModalInterface = {};
             $scope.ClearDeviceData = function ClearDeviceData() {
@@ -44,6 +46,8 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.strCountryClass = 'form-group';
             $scope.strEmailLogonClass = 'form-group';
             $scope.strPasswordLogonClass = 'form-group';
+            // Función de ejecución al llamar modal
+            $scope.CallBackModal = function () { return 0; };
             // Para identificar el serial del producto al que se le suben files. NOTA: Mejorar a guardar en DataUpload event a futuro
             $scope.DeviceActiveSerial = '';
             // Get Initial Data
@@ -134,6 +138,15 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                         }
                         else {
                             $loading.finish('myloading');
+                            $scope.MessagesModalInterface.button1Name = 'Ok';
+                            $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
+                            $scope.MessagesModalInterface.button2Name = '';
+                            $scope.MessagesModalInterface.bodyTitleMessage = 'Great!';
+                            $scope.MessagesModalInterface.bodyMessage = 'Your Device Warranty is safed now!';
+                            $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
+                            $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
+                            $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
+                            $scope.open();
                         }
                         $scope.devices = response.data.Devices;
                     }
@@ -283,10 +296,50 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     return el.make.name.toUpperCase().indexOf($scope.strSearchDeviceList.toUpperCase()) > -1 || el.model.name.toUpperCase().indexOf($scope.strSearchDeviceList.toUpperCase()) > -1 || el.category.name.toUpperCase().indexOf($scope.strSearchDeviceList.toUpperCase()) > -1 || el.subcategory.name.toUpperCase().indexOf($scope.strSearchDeviceList.toUpperCase()) > -1 || el.strSerial.toUpperCase().indexOf($scope.strSearchDeviceList.toUpperCase()) > -1 || el.strVendor.toUpperCase().indexOf($scope.strSearchDeviceList.toUpperCase()) > -1
                 })
             }
+            // Confirmación de desactivación
+            $scope.CallConfirmDeactivate = function (device) {
+                $scope.deactivatedevice = device;
+                $scope.CallBackModal = $scope.DeactivateDevice;
+                $scope.MessagesModalInterface.button1Name = 'Ok';
+                $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
+                $scope.MessagesModalInterface.button2Class = 'btn btn-default btn-margen';
+                $scope.MessagesModalInterface.button2Name = 'Cancel';
+                $scope.MessagesModalInterface.bodyTitleMessage = 'Sure?';
+                $scope.MessagesModalInterface.bodyMessage = 'Are you sure that you like to deactivate this device?';
+                $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
+                $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
+                $scope.open();
+            };
+            // Confirmación de traspaso
+            $scope.CallConfirmTransfer = function (device) {
+                var transferuser = $scope.transferusers.filter(function (el) { return el.email == device.strEmailTransfer });
+                if (transferuser.length == 0) {
+                    $scope.MessagesModalInterface.button1Name = 'Ok';
+                    $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
+                    $scope.MessagesModalInterface.button2Name = '';
+                    $scope.MessagesModalInterface.bodyTitleMessage = 'Oops!';
+                    $scope.MessagesModalInterface.bodyMessage = 'You mst select a valid user!';
+                    $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
+                    $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
+                    $scope.open();
+                    return 0;
+                }
+                $scope.deactivatedevice = device;
+                $scope.CallBackModal = $scope.TransferDevice;
+                $scope.MessagesModalInterface.button1Name = 'Ok';
+                $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
+                $scope.MessagesModalInterface.button2Class = 'btn btn-default btn-margen';
+                $scope.MessagesModalInterface.button2Name = 'Cancel';
+                $scope.MessagesModalInterface.bodyTitleMessage = 'Sure?';
+                $scope.MessagesModalInterface.bodyMessage = 'Are you sure that you like to transfer this device?';
+                $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
+                $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
+                $scope.open();
+            };
             // Desactiva el dispositivo
-            $scope.DeactivateDevice = function (device) {
+            $scope.DeactivateDevice = function () {
                 var Data = {};
-                Data.strSerial = device.strSerial;
+                Data.strSerial = $scope.deactivatedevice.strSerial;
                 $loading.start('myloading');
                 $http({
                     method: 'POST',
@@ -296,12 +349,42 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 }).then(function successCallback(response) {
                     $loading.finish('myloading');
                     if (response.data.Result == 'ok') {
-                        device.Status = 'Deactivated';
+                        $scope.deactivatedevice.Status = 'Deactivated';
                         $scope.MessagesModalInterface.button1Name = 'Ok';
                         $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
                         $scope.MessagesModalInterface.button2Name = '';
                         $scope.MessagesModalInterface.bodyTitleMessage = 'Ready!';
                         $scope.MessagesModalInterface.bodyMessage = 'Your your devices was deativated! Remember you can re-activate any time.';
+                        $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
+                        $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
+                        $scope.open();
+                    }
+                }, function errorCallback(response) {
+                    alert(response.statusText);
+                });
+            }
+            // Transfiere el dispositivo
+            $scope.TransferDevice = function () {
+                var Data = {};
+                Data.strSerial = $scope.deactivatedevice.strSerial;
+                Data.strEmailTransfer = $scope.deactivatedevice.strEmailTransfer;
+                $loading.start('myloading');
+                $http({
+                    method: 'POST',
+                    url: '/api/TransferDevice',
+                    headers: { 'Content-Type': 'application/json' },
+                    data: Data
+                }).then(function successCallback(response) {
+                    $loading.finish('myloading');
+                    if (response.data.Result == 'ok') {
+                        $scope.devices = $scope.devices.filter(function (el) { return el.strSerial != Data.strSerial });
+                        $scope.deviceslistfiltered = $scope.deviceslistfiltered.filter(function (el) { return el.strSerial != Data.strSerial });
+                        $scope.devicesfiltered = $scope.devicesfiltered.filter(function (el) { return el.strSerial != Data.strSerial });
+                        $scope.MessagesModalInterface.button1Name = 'Ok';
+                        $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
+                        $scope.MessagesModalInterface.button2Name = '';
+                        $scope.MessagesModalInterface.bodyTitleMessage = 'Ready!';
+                        $scope.MessagesModalInterface.bodyMessage = 'The device was transfered!';
                         $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
                         $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
                         $scope.open();
@@ -329,6 +412,15 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                             return $scope.MessagesModalInterface;
                         }
                     }
+                });
+                modalInstance.result.then(function (selectedItem) {
+                    if (selectedItem.action == 'btn1') {
+                        $scope.CallBackModal();
+                    }
+                    $scope.CallBackModal = function () { return 0; };
+                }, function () {
+                    $scope.CallBackModal();
+                    $scope.CallBackModal = function () { return 0; };
                 });
             };
             $scope.QuantityFiles = 0;
@@ -718,12 +810,13 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $ctrl.button1Name = MessagesModalInterface.button1Name;
             $ctrl.button1Class = MessagesModalInterface.button1Class;
             $ctrl.button2Name = MessagesModalInterface.button2Name;
+            $ctrl.button2Class = MessagesModalInterface.button2Class;
             $ctrl.bodyTitleMessageClass1 = MessagesModalInterface.bodyTitleMessageClass1;
             $ctrl.bodyTitleMessageClass2 = MessagesModalInterface.bodyTitleMessageClass2;
             $ctrl.button1Click = function () {
-                $uibModalInstance.close();
+                $uibModalInstance.close({ action: 'btn1' });
             };
             $ctrl.button2Click = function () {
-                $uibModalInstance.close();
+                $uibModalInstance.close({ action: 'btn2' });
             };
         })
