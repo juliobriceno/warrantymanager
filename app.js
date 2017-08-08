@@ -13,6 +13,39 @@ var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var google = require('googleapis');
 
+app.use(expressSession({ secret: '#19DieciNueveNoviembre', resave: true, saveUninitialized: true }));
+
+// Para validar cada vez que se llame a una rutina api que hay un usuario conectado y activo
+app.use(function (req, res, next) {
+    // Por ahora no se puede eliminar usuarios, pero a futuro.
+    var str = req.url;
+    var patt = new RegExp("/api");
+    if ((patt.test(str) == true)) {
+        var Data = {};
+        if (typeof req.session.user == 'undefined') {
+            Data.Result = 'usrnc';
+            res.end(JSON.stringify(Data))
+        }
+        else {
+            email = req.session.user.strEmail;
+            password = req.session.user.strPassword;
+            MyMongo.Find('Users', { $and: [{ "strEmail": email }, { "strPassword": password }] }, function (result) {
+                if (result.length == 0) {
+                    Data.Result = 'usrnc';
+                    res.end(JSON.stringify(Data))
+                }
+                else {
+                    next();
+                }
+            }
+            );
+        }
+    }
+    else {
+        next();
+    }
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -86,7 +119,6 @@ app.use(fileUpload());
 
 // must use cookieParser before expressSession
 app.use(cookieParser());
-app.use(expressSession({ secret: '#19DieciNueveNoviembre', resave: true, saveUninitialized: true }));
 
 app.use("/", express.static(__dirname + '/'));
 
@@ -123,6 +155,8 @@ app.post('/getSession', function (req, res) {
 app.post('/api/Logout', function (req, res) {
     var Data = {};
     req.session.user = undefined;
+    req.session.devices = undefined;
+    req.session.messages = undefined;
     Data.Result = 'ok';
     res.end(JSON.stringify(Data));
 });

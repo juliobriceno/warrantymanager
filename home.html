@@ -426,7 +426,7 @@
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class="col-xs-12 col-md-6">
-                                                    <input class="form-control" ng-model="strSearchDeviceList" ng-change="SearchDevicesList();" type="text" placeholder="Search ...">
+                                                    <input class="form-control" ng-model="strSearchDeviceList" ng-change="SearchDevicesList();" type="text" placeholder="Type for filter devices">
                                                 </div>
 
                                                 <div class="col-xs-12 col-md-6">
@@ -469,50 +469,38 @@
                                                         <td class="col-xs-12 col-sm-12 col-md-5">
                                                             <div class="media">
                                                                 <div class="media-body ">
-                                                                    <h4><a href="#">{{device.category.name + ' - ' + device.make.name + ' - ' + device.model.name }}</a></h4>
-                                                                    <div class="pull-left">
+                                                                    <div class="row">
+                                                                        <div class="col-xs-12 col-sm-12 col-md-9">
+                                                                            <h4><a href="#">{{device.category.name + ' - ' + device.make.name + ' - ' + device.model.name }}</a></h4>
+                                                                        </div>
+                                                                        <div class="col-xs-12 col-sm-12 col-md-1">
+                                                                            <button ng-click="CallConfirmDeactivate(device);" type="button" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div>
                                                                         <h6><span class="fa fa-barcode"></span><b> Serial:</b> {{device.strSerial}}</h6>
                                                                         <h6><span class="fa fa-calendar-check-o"></span><b> Date of Purchase:</b> {{device.datDatePurchase | date:'MM/dd/yyyy'}} </h6>
                                                                         <h6><span class="fa fa-handshake-o"></span><b> Vendor </b> {{device.strVendor}}</h6>
                                                                                                                                                
                                                                         <div class="form-group">
-                                                                          <h6 style="dipslay:inline-block;"><b>Are you warranty?:</b></h6>
-                                                                           <button class="btn btn-primary btn-xs" ng-click="CallConfirmDeactivate(device);" type="button">Deactivate</button>
+                                                                            <div class="row">
+                                                                                <div class="col-xs-12 col-sm-12 col-md-9">
+                                                                                    <input type="text" ng-model="device.strEmailTransfer" uib-typeahead="transferuser.email for transferuser in transferusers | filter:$viewValue | limitTo:8" class="form-control input-sm " placeholder="Type user to tranfer this device" typeahead-append-to-body="true">
+                                                                                </div>
+                                                                                <div class="col-xs-12 col-sm-12 col-md-1">
+                                                                                    <button ng-click="CallConfirmTransfer(device);" type="button" class="btn btn-primary"><i class="fa fa-exchange" aria-hidden="true"></i></button>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-
-
-
-                                                                        
-                                                                        <form class="form-inline">
-                                                                        <label class="control-label" ><h6><b>Person:</b></h6> </label>
-                                                                            <div class="input-group input-group-sm">
-
-                                                                              <input type="text" ng-model="device.strEmailTransfer" uib-typeahead="transferuser.email for transferuser in transferusers | filter:$viewValue | limitTo:8" class="form-control input-sm ">
-                                                                              <div class="input-group-btn">
-                                                                                <button class="btn btn-primary" placeholder="enter email" ng-click="CallConfirmTransfer(device);" type="button">transfer</button>
-                                                                              </div>
-                                                                            </div>
-                                                                        </form>
-                                                                        <form class="form-inline">
-                                                                            <div class="form-group  form-group-sm">
-                                                                                <label for="sel1" ><h6><b>Person:</b></h6> </label>
-                                                                                <input type="text" ng-model="device.strEmailTransfer" uib-typeahead="transferuser.email for transferuser in transferusers | filter:$viewValue | limitTo:8" class="form-control input-sm ">
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                               <button class="btn btn-primary btn-sm" placeholder="enter email" ng-click="CallConfirmTransfer(device);" type="button">Transfer</button>
-                                                                            </div>
-                                                                        </form>
-
-                                                  
                                                                     </div>
 
                                                                 </div> <!--fin media body-->
                                                             </div><!--fin media-->
                                                         </td> <!--fin td col-md5--> 
-                                                        
-                                                        <td class="col-xs-12 col-sm-12 col-md-7 text-center">
+
+                                                        <td class="col-xs-12 col-sm-12 col-md-5">
                                                             <div class="row">
-                                                                <h4><a href="#">Files</a></h4>
+                                                                <h4><a style="color:black;" href="#"> </a></h4>
                                                                 <div class="list-file col-xs-12 col-md-6">
                                                                     <span ng-repeat="file in device.Files" class="fa fa-file list-item-file"><a target="_blank" href="{{file.FilewebViewLink}}"> {{file.FileName}}</a> <a target="_blank" href="{{file.FilewebViewLink}}"><span class="btn  btn-sm fa fa-arrow-circle-o-down pull-right"></span></span></a>
                                                                 </div><!--fin list file-->

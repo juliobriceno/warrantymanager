@@ -59,6 +59,10 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     headers: { 'Content-Type': 'application/json' },
                     data: {}
                 }).then(function successCallback(response) {
+                    if (response.data.Result == 'usrnc') {
+                        window.location = '/index.html';
+                        return 0;
+                    };
                     $loading.finish('myloading');
                     if (response.data.Result == 'ok') {
                         $scope.user = response.data.User;
@@ -159,6 +163,18 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             }
             // Close session
             $scope.Logout = function () {
+                $scope.CallBackModal = $scope.CloseSession;
+                $scope.MessagesModalInterface.button1Name = 'Ok';
+                $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
+                $scope.MessagesModalInterface.button2Class = 'btn btn-default btn-margen';
+                $scope.MessagesModalInterface.button2Name = 'Cancel';
+                $scope.MessagesModalInterface.bodyTitleMessage = 'Sure?';
+                $scope.MessagesModalInterface.bodyMessage = 'Are you sure that you like to close session?';
+                $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
+                $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-question fa-4x i-green';
+                $scope.open();
+            };
+            $scope.CloseSession = function () {
                 $loading.start('myloading');
                 $http({
                     method: 'POST',
@@ -307,7 +323,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 $scope.MessagesModalInterface.bodyTitleMessage = 'Sure?';
                 $scope.MessagesModalInterface.bodyMessage = 'Are you sure that you like to deactivate this device?';
                 $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
-                $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
+                $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-question fa-4x i-green';
                 $scope.open();
             };
             // Confirmación de traspaso
@@ -318,9 +334,9 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
                     $scope.MessagesModalInterface.button2Name = '';
                     $scope.MessagesModalInterface.bodyTitleMessage = 'Oops!';
-                    $scope.MessagesModalInterface.bodyMessage = 'You mst select a valid user!';
-                    $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
-                    $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
+                    $scope.MessagesModalInterface.bodyMessage = 'You must select a valid user!';
+                    $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-red';
+                    $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-times fa-4x i-red';
                     $scope.open();
                     return 0;
                 }
@@ -333,7 +349,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 $scope.MessagesModalInterface.bodyTitleMessage = 'Sure?';
                 $scope.MessagesModalInterface.bodyMessage = 'Are you sure that you like to transfer this device?';
                 $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
-                $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
+                $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-question fa-4x i-green';
                 $scope.open();
             };
             // Desactiva el dispositivo
