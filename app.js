@@ -300,6 +300,7 @@ app.post('/api/DeactivateDevice', function (req, res) {
 app.post('/api/TransferDevice', function (req, res) {
     MyMongo.UpdateCriteria('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.strSerial }] }, { email: req.body.strEmailTransfer }, function (resp) {
         var Data = {};
+        req.session.devices = req.session.devices.filter(function (el) { return el.strSerial != req.body.strSerial });
         Data.Result = "ok";
         res.end(JSON.stringify(Data));
     });
