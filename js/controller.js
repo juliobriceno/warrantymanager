@@ -37,6 +37,9 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.user.strPassword = '';
             $scope.user.strConfirmPassword = '';
             $scope.user.strPhoneNumber = '';
+            $scope.filterDeviceCurrent = true;
+            $scope.filterDevicePast = true;
+            $scope.filterDeviceClose = true;
             $scope.strFirstNameClass = 'form-group';
             $scope.strLastNameClass = 'form-group';
             $scope.strEmailClass = 'form-group';
@@ -321,7 +324,12 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 $scope.MessagesModalInterface.button2Class = 'btn btn-default btn-margen';
                 $scope.MessagesModalInterface.button2Name = 'Cancel';
                 $scope.MessagesModalInterface.bodyTitleMessage = 'Sure?';
-                $scope.MessagesModalInterface.bodyMessage = 'Are you sure that you like to deactivate this device?';
+                if (device.Status == 'Active') {
+                    $scope.MessagesModalInterface.bodyMessage = 'Are you sure that you like to deactivate this device?';
+                }
+                else {
+                    $scope.MessagesModalInterface.bodyMessage = 'Are you sure that you like to re-activate this device?';
+                }
                 $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
                 $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-question fa-4x i-green';
                 $scope.open();
@@ -356,6 +364,12 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.DeactivateDevice = function () {
                 var Data = {};
                 Data.strSerial = $scope.deactivatedevice.strSerial;
+                if ($scope.deactivatedevice.Status == 'Active') {
+                    Data.Status = 'Deactivated';
+                }
+                else {
+                    Data.Status = 'Active';
+                }
                 $loading.start('myloading');
                 $http({
                     method: 'POST',
@@ -365,12 +379,18 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 }).then(function successCallback(response) {
                     $loading.finish('myloading');
                     if (response.data.Result == 'ok') {
-                        $scope.deactivatedevice.Status = 'Deactivated';
+                        if ($scope.deactivatedevice.Status == 'Active') {
+                            $scope.deactivatedevice.Status = 'Deactivated';
+                            $scope.MessagesModalInterface.bodyMessage = 'Your device was deativated! Remember you can re-activate any time.';
+                        }
+                        else {
+                            $scope.deactivatedevice.Status = 'Active';
+                            $scope.MessagesModalInterface.bodyMessage = 'Your device is active now.';
+                        }
                         $scope.MessagesModalInterface.button1Name = 'Ok';
                         $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
                         $scope.MessagesModalInterface.button2Name = '';
                         $scope.MessagesModalInterface.bodyTitleMessage = 'Ready!';
-                        $scope.MessagesModalInterface.bodyMessage = 'Your your devices was deativated! Remember you can re-activate any time.';
                         $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
                         $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
                         $scope.open();

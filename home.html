@@ -434,17 +434,17 @@
                                                        <div class="col-xs-12 col-sm-12 col-md-12 btn-group pull-right" role="group" aria-label="Basic example">
                                                             
                                                             <label for="current" class="col-xs-12 col-sm-4 col-md-4 btn btn-primary btn-sm">Current Devices 
-                                                                <input type="checkbox" name="your-group" value="unit-in-group" id="current" class="badgebox"><span class="badge">&check;</span>
+                                                                <input type="checkbox" name="your-group" ng-model="filterDeviceCurrent" class="badgebox"><span class="badge">&check;</span>
                                                             </label>
                                                        
                                                         
                                                             <label for="past" class="col-xs-12 col-sm-4 col-md-4 btn btn-primary btn-sm ">Past Devices 
-                                                                <input type="checkbox" name="your-group" value="unit-in-group" id="past" class="badgebox"><span class="badge">&check;</span>
+                                                                <input type="checkbox" name="your-group" ng-model="filterDevicePast" class="badgebox"><span class="badge">&check;</span>
                                                             </label>
                                                       
                                                        
                                                             <label for="close" class="col-xs-12 col-sm-4 col-md-4 btn btn-primary btn-sm ">Close Devices 
-                                                                <input type="checkbox" name="your-group" value="unit-in-group" id="close" class="badgebox"><span class="badge">&check;</span>
+                                                                <input type="checkbox" name="your-group" ng-model="filterDeviceClose" class="badgebox"><span class="badge">&check;</span>
                                                             </label>
                                                            
                                                       
@@ -474,7 +474,7 @@
                                                                             <h4><a href="#">{{device.category.name + ' - ' + device.make.name + ' - ' + device.model.name }}</a></h4>
                                                                         </div>
                                                                         <div class="col-xs-12 col-sm-12 col-md-1">
-                                                                            <button ng-click="CallConfirmDeactivate(device);" type="button" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                                                            <button ng-click="CallConfirmDeactivate(device);" type="button" ng-class="(device.Status=='Active') ? 'btn btn-danger' : 'btn btn-warning'"><i ng-class="(device.Status=='Active') ? 'fa fa-trash-o' : 'fa fa-undo'" aria-hidden="true"></i></button>
                                                                         </div>
                                                                     </div>
                                                                     <div>

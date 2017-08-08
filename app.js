@@ -289,9 +289,13 @@ app.post('/api/uploadFile', function (req, res) {
 
 // Desactivar dispositivo
 app.post('/api/DeactivateDevice', function (req, res) {
-    MyMongo.UpdateCriteria('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.strSerial }] }, { Status: 'Deactivated' }, function (resp) {
+    MyMongo.UpdateCriteria('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.strSerial }] }, { Status: req.body.Status }, function (resp) {
         var Data = {};
         Data.Result = "ok";
+        var tmpdevices = req.session.devices.filter(function (el) { return el.strSerial == req.body.strSerial })[0];
+        tmpdevices.Status = req.body.Status;
+        req.session.devices = req.session.devices.filter(function (el) { return el.strSerial != req.body.strSerial });
+        req.session.devices.push(tmpdevices);
         res.end(JSON.stringify(Data));
     });
 });
