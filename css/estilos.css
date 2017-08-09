@@ -362,3 +362,9 @@
     /* Move the check mark back when checked */
   text-indent: 0;
 }
+
+
+.margen-search{
+  padding: 10px !important;
+  background-color:#f6f6f6 !important;
+}
