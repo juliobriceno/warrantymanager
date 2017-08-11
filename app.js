@@ -187,6 +187,17 @@ app.post('/NewUserRegister', function (req, res) {
     });
 });
 
+// MakeUserVisible
+app.post('/api/MakeVisible', function (req, res) {
+    var Data = {};
+    MyMongo.UpdateCriteria('Users', { strEmail: req.session.user.strEmail }, { lastupdate: req.body.lastupdate, isvisible: req.body.isvisible }, function (resp) {
+        Data.Result = 'ok';
+        req.session.user.lastupdate = req.body.lastupdate;
+        req.session.user.isvisible = req.body.isvisible;
+        res.end(JSON.stringify(Data))
+    });
+});
+
 // Update user
 app.post('/api/UpdateUser', function (req, res) {
     var Data = {};
@@ -201,6 +212,28 @@ app.post('/api/UpdateUser', function (req, res) {
             });
         };
     });
+});
+
+// GetMakes
+app.post('/api/GetMakes', function (req, res) {
+    var Data = {};
+    MyMongo.Find('Makes', { 'name': { '$regex': req.body.params.val, $options: 'i' } }, function (result) {
+        var Data = {};
+        Data.Makes = result;
+        res.end(JSON.stringify(Data));
+    }
+    );
+});
+
+// GetModels
+app.post('/api/GetModels', function (req, res) {
+    var Data = {};
+    MyMongo.Find('Models', { 'name': { '$regex': req.body.params.val, $options: 'i' } }, function (result) {
+        var Data = {};
+        Data.Models = result;
+        res.end(JSON.stringify(Data));
+    }
+    );
 });
 
 // Registrar un nuevo dispositivo

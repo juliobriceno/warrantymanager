@@ -2,7 +2,7 @@ angular.element(function() {
     angular.bootstrap(document, ['WarrantyModule']);
 });
 
-angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngTagsInput', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.select'])
+angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngTagsInput', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.select', 'ui.toggle'])
 
         .controller('ctrlWarrantyHome', ['$scope', '$http', '$loading', '$uibModal', 'FileUploader', function ($scope, $http, $loading, $uibModal, FileUploader) {
             // Base de data
@@ -11,8 +11,8 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.MessagesModalInterface = {};
             $scope.ClearDeviceData = function ClearDeviceData() {
                 $scope.device = {};
-                $scope.device.make = {};
-                $scope.device.model = {};
+                $scope.device.make = '';
+                $scope.device.model = '';
                 $scope.device.category = {};
                 $scope.device.subcategory = {};
                 $scope.device.warrantytime = {};
@@ -214,6 +214,38 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     alert(response.statusText);
                 });
             };
+            $scope.MakeVisible = function () {
+                $loading.start('myloading');
+                var Data = {};
+                Data.lastupdate = new Date();
+                Data.isvisible = $scope.user.isvisible;
+                $http({
+                    method: 'POST',
+                    url: '/api/MakeVisible',
+                    headers: { 'Content-Type': 'application/json' },
+                    data: Data
+                }).then(function successCallback(response) {
+                    $loading.finish('myloading');
+                    if (response.data.Result == 'ok') {
+                        $scope.user.lastupdate = Data.lastupdate;
+                        $scope.MessagesModalInterface.button1Name = 'Ok';
+                        $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
+                        $scope.MessagesModalInterface.button2Name = '';
+                        $scope.MessagesModalInterface.bodyTitleMessage = 'Ready!';
+                        if ($scope.user.isvisible == true) {
+                            $scope.MessagesModalInterface.bodyMessage = 'Another user can send you a warranty for 48 hours!';
+                        }
+                        else {
+                            $scope.MessagesModalInterface.bodyMessage = 'You are not visible for warranty transfers!';
+                        }
+                        $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-green';
+                        $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-check fa-4x i-green';
+                        $scope.open();
+                    }
+                }, function errorCallback(response) {
+                    alert(response.statusText);
+                });
+            };
             $scope.UpdateUser = function () {
                 var booError = false;
                 if ($scope.user.strFirstName.trim() == '') {
@@ -361,15 +393,10 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 $scope.open();
             };
             // Desactiva el dispositivo
-            $scope.DeactivateDevice = function () {
+            $scope.DeactivateDevice = function (device) {
                 var Data = {};
-                Data.strSerial = $scope.deactivatedevice.strSerial;
-                if ($scope.deactivatedevice.Status == 'Active') {
-                    Data.Status = 'Deactivated';
-                }
-                else {
-                    Data.Status = 'Active';
-                }
+                Data.strSerial = device.strSerial;
+                Data.Status = device.Status;
                 $loading.start('myloading');
                 $http({
                     method: 'POST',
@@ -379,12 +406,10 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 }).then(function successCallback(response) {
                     $loading.finish('myloading');
                     if (response.data.Result == 'ok') {
-                        if ($scope.deactivatedevice.Status == 'Active') {
-                            $scope.deactivatedevice.Status = 'Deactivated';
+                        if (device.Status == false) {
                             $scope.MessagesModalInterface.bodyMessage = 'Your device was deativated! Remember you can re-activate any time.';
                         }
                         else {
-                            $scope.deactivatedevice.Status = 'Active';
                             $scope.MessagesModalInterface.bodyMessage = 'Your device is active now.';
                         }
                         $scope.MessagesModalInterface.button1Name = 'Ok';
@@ -467,6 +492,32 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 Data.DeviceActiveSerial = $scope.DeviceActiveSerial;
                 item.formData.push(Data);
             };
+            // Para llenar las marcas de forma asíncrona
+            $scope.getMakes = function (val) {
+                if (val.length < 2) { return 0 };
+                $loading.start('myloading');
+                return $http.post('/api/GetMakes', {
+                    params: {
+                        val: val
+                    }
+                }).then(function (response) {
+                    $loading.finish('myloading');
+                    return response.data.Makes;
+                });
+            };
+            // Para llenar los modelos de forma asíncrona
+            $scope.getModels = function (val) {
+                if (val.length < 2) { return 0 };
+                $loading.start('myloading');
+                return $http.post('/api/GetModels', {
+                    params: {
+                        val: val
+                    }
+                }).then(function (response) {
+                    $loading.finish('myloading');
+                    return response.data.Models;
+                });
+            };
             $scope.uploader.onSuccessItem = function (item, response) {
                 if ($scope.QuantityFiles == 1) {
                     $scope.uploader.clearQueue();
@@ -484,15 +535,6 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 }
                 $scope.QuantityFiles--;
             }
-            $scope.FillModels = function () {
-                // Lista de modelos (Fijos por traer de base de datos)
-                $scope.device.model = {};
-                $scope.models = [ // Taken from https://gist.github.com/unceus/6501985
-                { id: 1, name: 'Daewood Modelo 1', code: 'DA', makeid: 1 },
-                { id: 2, name: 'Daewood Modelo 2', code: 'FI', makeid: 1 },
-                { id: 3, name: 'Fiat Modelo 1', code: 'TO', makeid: 2 },
-                ];
-            };
             $scope.FillSubCategories = function () {
                 // Lista de subcategorías (Fijos por traer de base de datos)
                 $scope.device.subcategory = {};
@@ -521,6 +563,12 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             { id: 2, name: 'Fiat', code: 'FI' },
             { id: 3, name: 'Toyota', code: 'TO' },
             ];
+            // Lista de modelos (Fijos por traer de base de datos)
+            $scope.models = [ // Taken from https://gist.github.com/unceus/6501985
+            { id: 1, name: 'Daewood Modelo 1', code: 'DA', makeid: 1 },
+            { id: 2, name: 'Daewood Modelo 2', code: 'FI', makeid: 1 },
+            { id: 3, name: 'Fiat Modelo 1', code: 'TO', makeid: 2 },
+            ];
             // Lista de categorías (Fijos por traer de base de datos)
             $scope.categories = [ // Taken from https://gist.github.com/unceus/6501985
             { id: 1, name: 'Cell Phone', code: 'DA' },
@@ -537,12 +585,13 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.WarratyTimes = [ // Taken from https://gist.github.com/unceus/6501985
             { id: 1, name: '1 year', code: 'DA' },
             { id: 2, name: '2 years', code: 'EL' },
-            { id: 2, name: '3 years', code: 'EL' },
-            { id: 2, name: '4 years', code: 'EL' },
-            { id: 2, name: '5 years', code: 'EL' },
-            { id: 2, name: '6 years', code: 'EL' },
-            { id: 2, name: '7 years', code: 'EL' },
-            { id: 2, name: '8 years', code: 'EL' }
+            { id: 3, name: '3 years', code: 'EL' },
+            { id: 4, name: '4 years', code: 'EL' },
+            { id: 5, name: '5 years', code: 'EL' },
+            { id: 6, name: '6 years', code: 'EL' },
+            { id: 7, name: '7 years', code: 'EL' },
+            { id: 8, name: '8 years', code: 'EL' },
+            { id: 9, name: 'Lifetime Warranty', code: 'EL' }
             ];
             // Angular code date picker control
             $scope.today = function () {
@@ -692,6 +741,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 }
                 if (booError == true) { return 0; }
                 var Data = {};
+                $scope.user.isvisible = false;
                 Data.user = $scope.user;
                 $loading.start('myloading');
                 $http({
