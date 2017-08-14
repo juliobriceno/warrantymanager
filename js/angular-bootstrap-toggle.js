@@ -185,6 +185,7 @@
                             } else {
                                 $scope.wrapperStyle.height = wrapperHeight + 'px';
                             }
+                            $scope.wrapperStyle.height = 0;
                         }
 
                         // Build arrays that will be passed to widget's ng-class.

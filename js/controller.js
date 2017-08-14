@@ -804,11 +804,13 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                         $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
                         $scope.MessagesModalInterface.button2Name = '';
                         $scope.MessagesModalInterface.bodyTitleMessage = 'Oops!';
-                        $scope.MessagesModalInterface.bodyMessage = 'Credentials are invalid!';
+                        $scope.MessagesModalInterface.bodyMessage = 'Credentials are invalid! Please register';
                         $scope.MessagesModalInterface.button1Class = 'btn btn-primary btn-margen';
                         $scope.MessagesModalInterface.bodyTitleMessageClass1 = 'image-modal-red';
                         $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-times fa-4x i-red';
                         $scope.open();
+                        $('[href="#sign-out"]').tab('show');
+                        $scope.user.strEmail = $scope.userLogon.strEmail;
                     }
                 }, function errorCallback(response) {
                     alert(response.statusText);
