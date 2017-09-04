@@ -17,33 +17,55 @@ app.use(expressSession({ secret: '#19DieciNueveNoviembre', resave: true, saveUni
 
 // Para validar cada vez que se llame a una rutina api que hay un usuario conectado y activo
 app.use(function (req, res, next) {
-    // Por ahora no se puede eliminar usuarios, pero a futuro.
-    var str = req.url;
-    var patt = new RegExp("/api");
-    if ((patt.test(str) == true)) {
-        var Data = {};
-        if (typeof req.session.user == 'undefined') {
-            Data.Result = 'usrnc';
-            res.end(JSON.stringify(Data))
-        }
-        else {
-            email = req.session.user.strEmail;
-            password = req.session.user.strPassword;
-            MyMongo.Find('Users', { $and: [{ "strEmail": email }, { "strPassword": password }] }, function (result) {
-                if (result.length == 0) {
-                    Data.Result = 'usrnc';
-                    res.end(JSON.stringify(Data))
-                }
-                else {
-                    next();
-                }
-            }
-            );
-        }
-    }
-    else {
-        next();
-    }
+
+
+  MyMongo.Find('Users', { $and: [{ "strEmail": 'julio.briceno@gmail.com' }, { "strPassword": '333' }] }, function (result) {
+      if (result.length == 0) {
+          var a = '';
+      }
+      else {
+          req.session.user = result[0];
+          MyMongo.Find('Messages', { "email": req.session.user.strEmail }, function (result) {
+              req.session.messages = result;
+              MyMongo.Find('Devices', { "email": req.session.user.strEmail }, function (result) {
+                  req.session.devices = result;
+
+                  // Por ahora no se puede eliminar usuarios, pero a futuro.
+                  var str = req.url;
+                  var patt = new RegExp("/api");
+                  if ((patt.test(str) == true)) {
+                      var Data = {};
+                      if (typeof req.session.user == 'undefined') {
+                          Data.Result = 'usrnc';
+                          res.end(JSON.stringify(Data))
+                      }
+                      else {
+                          email = req.session.user.strEmail;
+                          password = req.session.user.strPassword;
+                          console.log('Pruebas 1');
+                          MyMongo.Find('Users', { $and: [{ "strEmail": email }, { "strPassword": password }] }, function (result) {
+                              if (result.length == 0) {
+                                  Data.Result = 'usrnc';
+                                  res.end(JSON.stringify(Data))
+                              }
+                              else {
+                                console.log('Pruebas 2');
+                                  next();
+                              }
+                          }
+                          );
+                      }
+                  }
+                  else {
+                    console.log('Pruebas 3');
+                      next();
+                  }
+
+              });
+          });
+      }
+  });
+
 });
 
 app.use(passport.initialize());
@@ -151,7 +173,7 @@ app.post('/getSession', function (req, res) {
     res.end(JSON.stringify(Data));
 });
 
-// Cierra sesión
+// Cierra sesiï¿½n
 app.post('/api/Logout', function (req, res) {
     var Data = {};
     req.session.user = undefined;
@@ -408,6 +430,7 @@ app.get('/auth/google/callback',
   });
 
 app.post('/Login', function (req, res) {
+   console.log(req);
     var mongodb = require('mongodb');
     var MongoClient = mongodb.MongoClient;
     var url = 'mongodb://juliobricenoro:juliobricenoro@ds139939.mlab.com:39939/juliobricenoro';
@@ -491,26 +514,26 @@ app.post('/upload', function (req, res) {
         Fila = Fila + 1;
         record.Fila = Fila;
         if (typeof record.Descripcion == 'undefined') {
-            record.Msg = 'No se encontró columna "Descripcion".';
+            record.Msg = 'No se encontrï¿½ columna "Descripcion".';
             Data.Result = 'nx';
         }
         if (typeof record.Precio == 'undefined') {
-            record.Msg = 'No se encontró columna "Precio".';
+            record.Msg = 'No se encontrï¿½ columna "Precio".';
             Data.Result = 'nx';
         }
         else {
             if (!isNumber(record.Precio)) {
-                record.Msg = 'La columna "Precio no es un número".';
+                record.Msg = 'La columna "Precio no es un nï¿½mero".';
                 Data.Result = 'nx';
             }
         }
         if (typeof record.Cantidad == 'undefined') {
-            record.Msg = 'No se encontró columna "Cantidad".';
+            record.Msg = 'No se encontrï¿½ columna "Cantidad".';
             Data.Result = 'nx';
         }
         else {
             if (Math.floor(record.Cantidad) != record.Cantidad || !isNumber(record.Cantidad)) {
-                record.Msg = 'La columna "Cantidad" no es un número entero.';
+                record.Msg = 'La columna "Cantidad" no es un nï¿½mero entero.';
                 Data.Result = 'nx';
             }
         }
@@ -601,7 +624,7 @@ app.post('/RecoverPassword', function (req, res) {
 
             var msg = "<table style='max-width: 600px; padding: 10px; margin:0 auto; border-collapse: collapse;'><tr><td style='background-color: #fff; text-align: left; padding: 0;'><img width='20%' style='display:block; margin: 2% 3%' src=''></a></td></tr><tr><td style='padding: 0'></td></tr><tr><td style='background-color: #fff'><div style='color: #34495e; text-align: justify;font-family: sans-serif'><div style='color: #fff; margin: 0 0 5%; text-align:center; height: 120px; background-color: #3498db; padding: 4% 10% 2%; font-size: 23px;'><b>La nueva clave de su usuario para acceso al portal Incorp es: <label>" + text + "</label> </b> <br><br><a href=''></a></b></div><p style='margin: 2%px; font-size: 15px; margin: 4% 10% 2%;'><br></p><div style='width: 100%;margin:20px 0; display: inline-block;text-align: center'></div><div style='width: 100%; text-align: center'><a style='text-decoration: none; border-radius: 5px; padding: 11px 23px; color: white; background-color: #3498db' href='http://vps-1299884-x.dattaweb.com:8081'>Ir al <b>Portal</b></a></div><p style='color: #b3b3b3; font-size: 12px; text-align: center;margin: 30px 0 0; padding:20px 0 0;  background-color:#3498db; height: 30px'>Portal del cliente Incorp.</p></div></td></tr></table>";
 
-            MyMail.SendEmail(msg, req.body.userLogon.strEmail, "Solicitó una nueva clave para WApprranty.");
+            MyMail.SendEmail(msg, req.body.userLogon.strEmail, "Solicitï¿½ una nueva clave para WApprranty.");
 
             var Data = {};
             Data.Result = 'Ok';
