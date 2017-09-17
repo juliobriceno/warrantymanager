@@ -343,6 +343,9 @@ app.post('/api/uploadFileFromDevice', function (req, res) {
 
     req.body.Files.forEach(function(myFile) {
 
+          console.log('BASE 64');
+          console.log(b64string);
+
           const fileType = require('file-type');
           // Un archivo en base64 que se convierte a buffer
           var b64string = myFile.data;
@@ -351,6 +354,10 @@ app.post('/api/uploadFileFromDevice', function (req, res) {
           b64string = b64string.replace("data:application/pdf;base64,", "");
 
           myFile.data = Buffer.from(b64string, 'base64'); // Ta-da
+
+          console.log('BINARY');
+          console.log(myFile.data);
+
           // se busca del archivo en base64 el mimeType
           // get the mimetype
           myFile.mimetype = fileType(myFile.data).mime;
