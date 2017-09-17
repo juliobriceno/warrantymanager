@@ -343,12 +343,12 @@ app.post('/api/uploadFileFromDevice', function (req, res) {
 
     req.body.Files.forEach(function(myFile) {
 
-          console.log('BASE 64');
-          console.log(b64string);
-
           const fileType = require('file-type');
           // Un archivo en base64 que se convierte a buffer
           var b64string = myFile.data;
+
+          console.log('BASE 64');
+          console.log(b64string);
 
           b64string = b64string.replace("data:image/jpeg;base64,", "");
           b64string = b64string.replace("data:application/pdf;base64,", "");
