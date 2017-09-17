@@ -49,7 +49,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.strCountryClass = 'form-group';
             $scope.strEmailLogonClass = 'form-group';
             $scope.strPasswordLogonClass = 'form-group';
-            // Función de ejecución al llamar modal
+            // Funciï¿½n de ejecuciï¿½n al llamar modal
             $scope.CallBackModal = function () { return 0; };
             // Para identificar el serial del producto al que se le suben files. NOTA: Mejorar a guardar en DataUpload event a futuro
             $scope.DeviceActiveSerial = '';
@@ -333,21 +333,21 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             $scope.SetListDevice = function () {
                 $scope.deviceslistfiltered = $scope.devices;
             }
-            // Búsqueda de devices en dashboard y lista de dispositivos
+            // Bï¿½squeda de devices en dashboard y lista de dispositivos
             $scope.SearchDevices = function () {
                 $scope.devicesfiltered = $scope.devices;
                 $scope.devicesfiltered = $scope.devicesfiltered.filter(function (el) {
                     return el.make.name.toUpperCase().indexOf($scope.strSearchDevice.toUpperCase()) > -1 || el.model.name.toUpperCase().indexOf($scope.strSearchDevice.toUpperCase()) > -1 || el.category.name.toUpperCase().indexOf($scope.strSearchDevice.toUpperCase()) > -1
                 })
             }
-            // Búsqueda de devices en dashboard y lista de dispositivos para pantalla de listados
+            // Bï¿½squeda de devices en dashboard y lista de dispositivos para pantalla de listados
             $scope.SearchDevicesList = function () {
                 $scope.deviceslistfiltered = $scope.devices;
                 $scope.deviceslistfiltered = $scope.deviceslistfiltered.filter(function (el) {
                     return el.make.name.toUpperCase().indexOf($scope.strSearchDeviceList.toUpperCase()) > -1 || el.model.name.toUpperCase().indexOf($scope.strSearchDeviceList.toUpperCase()) > -1 || el.category.name.toUpperCase().indexOf($scope.strSearchDeviceList.toUpperCase()) > -1 || el.subcategory.name.toUpperCase().indexOf($scope.strSearchDeviceList.toUpperCase()) > -1 || el.strSerial.toUpperCase().indexOf($scope.strSearchDeviceList.toUpperCase()) > -1 || el.strVendor.toUpperCase().indexOf($scope.strSearchDeviceList.toUpperCase()) > -1
                 })
             }
-            // Confirmación de desactivación
+            // Confirmaciï¿½n de desactivaciï¿½n
             $scope.CallConfirmDeactivate = function (device) {
                 $scope.deactivatedevice = device;
                 $scope.CallBackModal = $scope.DeactivateDevice;
@@ -366,7 +366,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 $scope.MessagesModalInterface.bodyTitleMessageClass2 = 'fa fa-question fa-4x i-green';
                 $scope.open();
             };
-            // Confirmación de traspaso
+            // Confirmaciï¿½n de traspaso
             $scope.CallConfirmTransfer = function (device) {
                 var transferuser = $scope.transferusers.filter(function (el) { return el.email == device.strEmailTransfer });
                 if (transferuser.length == 0) {
@@ -492,7 +492,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 Data.DeviceActiveSerial = $scope.DeviceActiveSerial;
                 item.formData.push(Data);
             };
-            // Para llenar las marcas de forma asíncrona
+            // Para llenar las marcas de forma asï¿½ncrona
             $scope.getMakes = function (val) {
                 if (val.length < 2) { return 0 };
                 $loading.start('myloading');
@@ -505,7 +505,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     return response.data.Makes;
                 });
             };
-            // Para llenar los modelos de forma asíncrona
+            // Para llenar los modelos de forma asï¿½ncrona
             $scope.getModels = function (val) {
                 if (val.length < 2) { return 0 };
                 $loading.start('myloading');
@@ -536,7 +536,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 $scope.QuantityFiles--;
             }
             $scope.FillSubCategories = function () {
-                // Lista de subcategorías (Fijos por traer de base de datos)
+                // Lista de subcategorï¿½as (Fijos por traer de base de datos)
                 $scope.device.subcategory = {};
                 $scope.subcategories = [ // Taken from https://gist.github.com/unceus/6501985
                 { id: 1, name: 'SmartPhone', code: 'DA', categoryid: 1 },
@@ -569,7 +569,7 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             { id: 2, name: 'Daewood Modelo 2', code: 'FI', makeid: 1 },
             { id: 3, name: 'Fiat Modelo 1', code: 'TO', makeid: 2 },
             ];
-            // Lista de categorías (Fijos por traer de base de datos)
+            // Lista de categorï¿½as (Fijos por traer de base de datos)
             $scope.categories = [ // Taken from https://gist.github.com/unceus/6501985
             { id: 1, name: 'Cell Phone', code: 'DA' },
             { id: 2, name: 'Electronic', code: 'EL' },
@@ -665,9 +665,9 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 }
                 return '';
             }
-            // Lista de países (Fijos)
+            // Lista de paï¿½ses (Fijos)
             $scope.countries = lCountries;
-            // End countries control code 
+            // End countries control code
         }])
 
         .controller('ctrlWarrantyLogin', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
@@ -884,9 +884,9 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                     }
                 });
             };
-            // Lista de países (Fijos)
+            // Lista de paï¿½ses (Fijos)
             $scope.countries = lCountries;
-            // End countries control code 
+            // End countries control code
         }])
 
         // Controlador de la ventana de modal de mensajes

@@ -7,6 +7,7 @@ var session = require('client-sessions');
 var expressSession = require('express-session');
 var cookieParser = require('cookie-parser');
 var MyMongo = require('./js/mymongo.js');
+var MyMsg = require('./js/mymsg.js');
 var fileUpload = require('express-fileupload');
 var MyMail = require('./js/mails.js');
 var passport = require('passport');
@@ -19,52 +20,85 @@ app.use(expressSession({ secret: '#19DieciNueveNoviembre', resave: true, saveUni
 app.use(function (req, res, next) {
 
 
-  MyMongo.Find('Users', { $and: [{ "strEmail": 'julio.briceno@gmail.com' }, { "strPassword": '333' }] }, function (result) {
-      if (result.length == 0) {
-          var a = '';
+  // Así queda cuando es desde otro lado
+  var str = req.url;
+  var patt = new RegExp("/api");
+  if ((patt.test(str) == true)) {
+      var Data = {};
+      if (typeof req.session.user == 'undefined') {
+          Data.Result = 'usrnc';
+          res.end(JSON.stringify(Data))
       }
       else {
-          req.session.user = result[0];
-          MyMongo.Find('Messages', { "email": req.session.user.strEmail }, function (result) {
-              req.session.messages = result;
-              MyMongo.Find('Devices', { "email": req.session.user.strEmail }, function (result) {
-                  req.session.devices = result;
-
-                  // Por ahora no se puede eliminar usuarios, pero a futuro.
-                  var str = req.url;
-                  var patt = new RegExp("/api");
-                  if ((patt.test(str) == true)) {
-                      var Data = {};
-                      if (typeof req.session.user == 'undefined') {
-                          Data.Result = 'usrnc';
-                          res.end(JSON.stringify(Data))
-                      }
-                      else {
-                          email = req.session.user.strEmail;
-                          password = req.session.user.strPassword;
-                          console.log('Pruebas 1');
-                          MyMongo.Find('Users', { $and: [{ "strEmail": email }, { "strPassword": password }] }, function (result) {
-                              if (result.length == 0) {
-                                  Data.Result = 'usrnc';
-                                  res.end(JSON.stringify(Data))
-                              }
-                              else {
-                                console.log('Pruebas 2');
-                                  next();
-                              }
-                          }
-                          );
-                      }
-                  }
-                  else {
-                    console.log('Pruebas 3');
-                      next();
-                  }
-
-              });
-          });
+          email = req.session.user.strEmail;
+          password = req.session.user.strPassword;
+          console.log('Pruebas 1');
+          MyMongo.Find('Users', { $and: [{ "strEmail": email }, { "strPassword": password }] }, function (result) {
+              if (result.length == 0) {
+                  Data.Result = 'usrnc';
+                  res.end(JSON.stringify(Data))
+              }
+              else {
+                console.log('Pruebas 2');
+                  next();
+              }
+          }
+          );
       }
-  });
+  }
+  else {
+    console.log('Pruebas 3');
+      next();
+  }
+  // Fin Así queda cuando es desde otro lado
+
+
+  // MyMongo.Find('Users', { $and: [{ "strEmail": 'julio.briceno@gmail.com' }, { "strPassword": '333' }] }, function (result) {
+  //     if (result.length == 0) {
+  //         var a = '';
+  //     }
+  //     else {
+  //         req.session.user = result[0];
+  //         MyMongo.Find('Messages', { "email": req.session.user.strEmail }, function (result) {
+  //             req.session.messages = result;
+  //             MyMongo.Find('Devices', { "email": req.session.user.strEmail }, function (result) {
+  //                 req.session.devices = result;
+  //
+  //                 // Por ahora no se puede eliminar usuarios, pero a futuro.
+  //                 var str = req.url;
+  //                 var patt = new RegExp("/api");
+  //                 if ((patt.test(str) == true)) {
+  //                     var Data = {};
+  //                     if (typeof req.session.user == 'undefined') {
+  //                         Data.Result = 'usrnc';
+  //                         res.end(JSON.stringify(Data))
+  //                     }
+  //                     else {
+  //                         email = req.session.user.strEmail;
+  //                         password = req.session.user.strPassword;
+  //                         console.log('Pruebas 1');
+  //                         MyMongo.Find('Users', { $and: [{ "strEmail": email }, { "strPassword": password }] }, function (result) {
+  //                             if (result.length == 0) {
+  //                                 Data.Result = 'usrnc';
+  //                                 res.end(JSON.stringify(Data))
+  //                             }
+  //                             else {
+  //                               console.log('Pruebas 2');
+  //                                 next();
+  //                             }
+  //                         }
+  //                         );
+  //                     }
+  //                 }
+  //                 else {
+  //                   console.log('Pruebas 3');
+  //                     next();
+  //                 }
+  //
+  //             });
+  //         });
+  //     }
+  // });
 
 });
 
@@ -136,7 +170,9 @@ app.use("/lib", express.static(__dirname + '/lib'));
 app.use("/img", express.static(__dirname + '/img'));
 app.use("/", express.static(__dirname + '/'));
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '20mb'}));
+app.use(bodyParser.urlencoded({limit: '20mb', extended: true}));
+
 app.use(fileUpload());
 
 // must use cookieParser before expressSession
@@ -299,6 +335,71 @@ app.post('/api/UpdateMessages', function (req, res) {
             });
         };
     });
+});
+
+// Subir archivos y escribirlos en disco Desde el dispositivo se envían en base64
+// antes del proceso se conerten a binary data
+app.post('/api/uploadFileFromDevice', function (req, res) {
+
+    req.body.Files.forEach(function(myFile) {
+
+          const fileType = require('file-type');
+          // Un archivo en base64 que se convierte a buffer
+          var b64string = myFile.data;
+
+          b64string = b64string.replace("data:image/jpeg;base64,", "");
+          b64string = b64string.replace("data:application/pdf;base64,", "");
+
+          myFile.data = Buffer.from(b64string, 'base64'); // Ta-da
+          // se busca del archivo en base64 el mimeType
+          // get the mimetype
+          myFile.mimetype = fileType(myFile.data).mime;
+
+          var Data = {};
+          var sampleFile;
+          sampleFile = myFile;
+          var fileMetadata = {
+              'name': sampleFile.name,
+              parents: ['0B2_PIECATjTWaHNxOGd2cjhSRnc']
+          };
+          var media = {
+              mimeType: sampleFile.mimetype,
+              body: sampleFile.data
+          };
+          drive.files.create({
+              auth: jwtClient,
+              resource: fileMetadata,
+              media: media,
+              fields: 'id, webContentLink, webViewLink, thumbnailLink'
+          }, function (err, file) {
+              if (err) {
+                  console.log(err);
+              } else {
+
+
+                Data.Result = 'ok';
+                res.end(JSON.stringify(Data))
+                console.log(file.id);
+
+
+                  // MyMongo.Find('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.DeviceActiveSerial } ] }, function (result) {
+                  //     var NewFiles = result[0].Files;
+                  //     NewFiles.push({ FilewebViewLink: file.webViewLink, FileName: sampleFile.name, FilethumbnailLink: file.thumbnailLink });
+                  //     MyMongo.UpdateCriteria('Devices', { $and: [{ email: req.session.user.strEmail }, { strSerial: req.body.DeviceActiveSerial }] }, { Files: NewFiles }, function (resp) {
+                  //         MyMongo.Find('Devices', { email: req.session.user.strEmail }, function (result) {
+                  //             Data.Result = 'ok';
+                  //             Data.Devices = result;
+                  //             res.end(JSON.stringify(Data))
+                  //             console.log(file.id);
+                  //         });
+                  //     });
+                  // });
+
+
+              }
+          });
+    });
+
 });
 
 // Subir archivos y escribirlos en disco
@@ -622,9 +723,9 @@ app.post('/RecoverPassword', function (req, res) {
     MyMongo.Update('Users', { 'strEmail': req.body.userLogon.strEmail }, { 'strPassword': text, 'strConfirmPassword': text }, function (result) {
         if (result == 'Ok') {
 
-            var msg = "<table style='max-width: 600px; padding: 10px; margin:0 auto; border-collapse: collapse;'><tr><td style='background-color: #fff; text-align: left; padding: 0;'><img width='20%' style='display:block; margin: 2% 3%' src=''></a></td></tr><tr><td style='padding: 0'></td></tr><tr><td style='background-color: #fff'><div style='color: #34495e; text-align: justify;font-family: sans-serif'><div style='color: #fff; margin: 0 0 5%; text-align:center; height: 120px; background-color: #3498db; padding: 4% 10% 2%; font-size: 23px;'><b>La nueva clave de su usuario para acceso al portal Incorp es: <label>" + text + "</label> </b> <br><br><a href=''></a></b></div><p style='margin: 2%px; font-size: 15px; margin: 4% 10% 2%;'><br></p><div style='width: 100%;margin:20px 0; display: inline-block;text-align: center'></div><div style='width: 100%; text-align: center'><a style='text-decoration: none; border-radius: 5px; padding: 11px 23px; color: white; background-color: #3498db' href='http://vps-1299884-x.dattaweb.com:8081'>Ir al <b>Portal</b></a></div><p style='color: #b3b3b3; font-size: 12px; text-align: center;margin: 30px 0 0; padding:20px 0 0;  background-color:#3498db; height: 30px'>Portal del cliente Incorp.</p></div></td></tr></table>";
+            var msg = MyMsg.MailBody.replace('XXCCCCCf45', text);
 
-            MyMail.SendEmail(msg, req.body.userLogon.strEmail, "Solicit� una nueva clave para WApprranty.");
+            MyMail.SendEmail(msg, req.body.userLogon.strEmail, "New password for Wappanty.");
 
             var Data = {};
             Data.Result = 'Ok';

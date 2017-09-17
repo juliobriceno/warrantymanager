@@ -1,10 +1,10 @@
 // JavaScript source code
 
 // List of countries
-var lCountries = 
+var lCountries =
 [ // Taken from https://gist.github.com/unceus/6501985
             { id: 1, name: 'Afghanistan', code: 'AF' },
-            { id: 2, name: 'Åland Islands', code: 'AX' },
+            { id: 2, name: 'ï¿½land Islands', code: 'AX' },
             { id: 3, name: 'Albania', code: 'AL' },
             { id: 4, name: 'Algeria', code: 'DZ' },
             { id: 5, name: 'American Samoa', code: 'AS' },
