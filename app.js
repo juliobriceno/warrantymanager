@@ -352,6 +352,7 @@ app.post('/api/uploadFileFromDevice', function (req, res) {
 
           b64string = b64string.replace("data:image/jpeg;base64,", "");
           b64string = b64string.replace("data:application/pdf;base64,", "");
+          b64string = b64string.replace("data:image/png;base64,", "");
 
           myFile.data = Buffer.from(b64string, 'base64'); // Ta-da
 
