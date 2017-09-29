@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8"/>
+    <title>Registro Garantía::..</title>
+    <link rel="stylesheet" href="css/estilos.css"/> <!--enlace de hoja de estilos -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <!-- *****************************************Bootstrap.Estilos***************************************** -->
+    <link rel="stylesheet" href="css/bootstrap.min.css"/><!--enlace bootstrap -->
+    <!-- *****************************************Lists***************************************** -->
+    <script src="js/Lists.js"></script>
+    <!-- *****************************************JQuery***************************************** -->
+    <script src="js/jquery.js"></script>
+    <!-- *****************************************Bootstrap.Códigos***************************************** -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"> <!-- enlace con fuentes font-awosome-->
+    <!-- *****************************************Angular Librerías***************************************** -->
+    <script src="js/angular.js"></script>
+    <script src="js/ng-draggable-widgets.js"></script>
+
+    <script src="js/angular-animate.js"></script>
+    <script src="js/angular-sanitize.js"></script>
+    <!-- *****************************************Boostrap Angular Librerías***************************************** -->
+    <script src="js/ui-bootstrap-tpls-2.5.0.js"></script>
+    <!-- *****************************************Example Código***************************************** -->
+    <script src="js/example.js"></script>
+    <!-- *****************************************Código de Select Boostrap Angular***************************************** -->
+    <script src="./select.js"></script>
+    <link rel="stylesheet" href="./select.css">
+    <script src="./demo.js"></script>
+    <!-- *****************************************Librería de Select Boostrap Angular***************************************** -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
+    <!-- *****************************************Librería de controlador principal***************************************** -->
+    <script src="js/controller.js"></script>
+    <!-- *****************************************Librería de angular loading***************************************** -->
+    <script src="js/spin.min.js"></script>
+    <script src="js/angular-loading.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/angular-loading.css" />
+    <link rel="stylesheet" type="text/css" href="css/demo.css">
+    <!-- *****************************************Librería de angular tags inputs***************************************** -->
+    <link rel="stylesheet" href="css/ng-tags-input.min.css" />
+    <script src="js/ng-tags-input.min.js"></script>
+    <!-- *****************************************Librería de file upload***************************************** -->
+    <script src="js/angular-file-upload.min.js"></script>
+    <!-- *****************************************Librería de boostrap toogle ***************************************** -->
+    <link href="css/angular-bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="css/estiloslistas.css" rel="stylesheet">
+
+    <script src="js/angular-bootstrap-toggle.min.js"></script>
+</head>
+
+<body ng-controller="ctrlWarrantyLogin">
+  <div drag-group="widgets">
+    <div ng-repeat="widget in widgets" draggable-widget="widget" draggable-widget-callback="moveWidget" class="{{widget.class}}">
+      <div draggable-widget-handle>drag</div>
+      <p ng-show="widget.mas">{{widget.title}}</p>
+      <p ng-show="!widget.mas">{{widget.title+widget.title}}</p>
+    </div>
+  </div>
+</body>
+</html>

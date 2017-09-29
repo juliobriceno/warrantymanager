@@ -20,85 +20,85 @@ app.use(expressSession({ secret: '#19DieciNueveNoviembre', resave: true, saveUni
 app.use(function (req, res, next) {
 
 
-  // Así queda cuando es desde otro lado
-  var str = req.url;
-  var patt = new RegExp("/api");
-  if ((patt.test(str) == true)) {
-      var Data = {};
-      if (typeof req.session.user == 'undefined') {
-          Data.Result = 'usrnc';
-          res.end(JSON.stringify(Data))
-      }
-      else {
-          email = req.session.user.strEmail;
-          password = req.session.user.strPassword;
-          console.log('Pruebas 1');
-          MyMongo.Find('Users', { $and: [{ "strEmail": email }, { "strPassword": password }] }, function (result) {
-              if (result.length == 0) {
-                  Data.Result = 'usrnc';
-                  res.end(JSON.stringify(Data))
-              }
-              else {
-                console.log('Pruebas 2');
-                  next();
-              }
-          }
-          );
-      }
-  }
-  else {
-    console.log('Pruebas 3');
-      next();
-  }
-  // Fin Así queda cuando es desde otro lado
-
-
-  // MyMongo.Find('Users', { $and: [{ "strEmail": 'julio.briceno@gmail.com' }, { "strPassword": '333' }] }, function (result) {
-  //     if (result.length == 0) {
-  //         var a = '';
+  // // Así queda cuando es desde otro lado
+  // var str = req.url;
+  // var patt = new RegExp("/api");
+  // if ((patt.test(str) == true)) {
+  //     var Data = {};
+  //     if (typeof req.session.user == 'undefined') {
+  //         Data.Result = 'usrnc';
+  //         res.end(JSON.stringify(Data))
   //     }
   //     else {
-  //         req.session.user = result[0];
-  //         MyMongo.Find('Messages', { "email": req.session.user.strEmail }, function (result) {
-  //             req.session.messages = result;
-  //             MyMongo.Find('Devices', { "email": req.session.user.strEmail }, function (result) {
-  //                 req.session.devices = result;
-  //
-  //                 // Por ahora no se puede eliminar usuarios, pero a futuro.
-  //                 var str = req.url;
-  //                 var patt = new RegExp("/api");
-  //                 if ((patt.test(str) == true)) {
-  //                     var Data = {};
-  //                     if (typeof req.session.user == 'undefined') {
-  //                         Data.Result = 'usrnc';
-  //                         res.end(JSON.stringify(Data))
-  //                     }
-  //                     else {
-  //                         email = req.session.user.strEmail;
-  //                         password = req.session.user.strPassword;
-  //                         console.log('Pruebas 1');
-  //                         MyMongo.Find('Users', { $and: [{ "strEmail": email }, { "strPassword": password }] }, function (result) {
-  //                             if (result.length == 0) {
-  //                                 Data.Result = 'usrnc';
-  //                                 res.end(JSON.stringify(Data))
-  //                             }
-  //                             else {
-  //                               console.log('Pruebas 2');
-  //                                 next();
-  //                             }
-  //                         }
-  //                         );
-  //                     }
-  //                 }
-  //                 else {
-  //                   console.log('Pruebas 3');
-  //                     next();
-  //                 }
-  //
-  //             });
-  //         });
+  //         email = req.session.user.strEmail;
+  //         password = req.session.user.strPassword;
+  //         console.log('Pruebas 1');
+  //         MyMongo.Find('Users', { $and: [{ "strEmail": email }, { "strPassword": password }] }, function (result) {
+  //             if (result.length == 0) {
+  //                 Data.Result = 'usrnc';
+  //                 res.end(JSON.stringify(Data))
+  //             }
+  //             else {
+  //               console.log('Pruebas 2');
+  //                 next();
+  //             }
+  //         }
+  //         );
   //     }
-  // });
+  // }
+  // else {
+  //   console.log('Pruebas 3');
+  //     next();
+  // }
+  // // Fin Así queda cuando es desde otro lado
+
+
+  MyMongo.Find('Users', { $and: [{ "strEmail": 'julio.briceno@gmail.com' }, { "strPassword": '333' }] }, function (result) {
+      if (result.length == 0) {
+          var a = '';
+      }
+      else {
+          req.session.user = result[0];
+          MyMongo.Find('Messages', { "email": req.session.user.strEmail }, function (result) {
+              req.session.messages = result;
+              MyMongo.Find('Devices', { "email": req.session.user.strEmail }, function (result) {
+                  req.session.devices = result;
+
+                  // Por ahora no se puede eliminar usuarios, pero a futuro.
+                  var str = req.url;
+                  var patt = new RegExp("/api");
+                  if ((patt.test(str) == true)) {
+                      var Data = {};
+                      if (typeof req.session.user == 'undefined') {
+                          Data.Result = 'usrnc';
+                          res.end(JSON.stringify(Data))
+                      }
+                      else {
+                          email = req.session.user.strEmail;
+                          password = req.session.user.strPassword;
+                          console.log('Pruebas 1');
+                          MyMongo.Find('Users', { $and: [{ "strEmail": email }, { "strPassword": password }] }, function (result) {
+                              if (result.length == 0) {
+                                  Data.Result = 'usrnc';
+                                  res.end(JSON.stringify(Data))
+                              }
+                              else {
+                                console.log('Pruebas 2');
+                                  next();
+                              }
+                          }
+                          );
+                      }
+                  }
+                  else {
+                    console.log('Pruebas 3');
+                      next();
+                  }
+
+              });
+          });
+      }
+  });
 
 });
 

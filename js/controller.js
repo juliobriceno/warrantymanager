@@ -2,7 +2,7 @@ angular.element(function() {
     angular.bootstrap(document, ['WarrantyModule']);
 });
 
-angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngTagsInput', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.select', 'ui.toggle'])
+angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngTagsInput', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.select', 'ui.toggle', 'ng-draggable-widgets'])
 
         .controller('ctrlWarrantyHome', ['$scope', '$http', '$loading', '$uibModal', 'FileUploader', function ($scope, $http, $loading, $uibModal, FileUploader) {
             // Base de data
@@ -671,6 +671,42 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         }])
 
         .controller('ctrlWarrantyLogin', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+
+          // Temp
+          var widgets = [
+            {
+              title:'Cats with Woks',
+              mas:true,
+              class: 'woks'
+            },
+            {
+              title:'Socks on Sticks',
+              mas:true,
+              class: 'socks'
+            },
+            {
+              title:'Mocks of Macs',
+              mas:false,
+              class: 'mocks'
+            },
+            {
+              title:'Pops in Pumps',
+              mas:false,
+              class: 'pops'
+            },
+            {
+              title:'Hocks of Rumps',
+              mas:true,
+              class: 'hocks'
+            }
+          ];
+          $scope.widgets = widgets;
+          $scope.moveWidget = function(drag) {
+            console.log('DALEEEEEEEEEEEEEEEEEEEEEEEEEEE');
+            console.log($scope.widgets);
+          }
+          // Fin Temp
+
             // Valores por defecto de modales
             $scope.MessagesModalInterface = {};
             // Inicio variables
