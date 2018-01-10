@@ -135,8 +135,8 @@
                                                 <div class="widget-icon green pull-left">
                                                     <i class="fa fa-shield"></i>
                                                 </div>
-                                                <div class="comment">Current Devices</div>
-                                                <div class="title">{{devices.length}}</div>
+                                                <div class="comment">Protected Devices</div>
+                                                <div class="title">{{protecteddevicescount}}</div>
 
                                             </div>
                                         </div>
@@ -149,13 +149,13 @@
                                                 <div class="widget-icon orange pull-left">
                                                     <i class="glyphicon glyphicon-ok"></i>
                                                 </div>
-                                                <div class="comment">Past Devices</div>
-                                                <div class="title">0</div>
+                                                <div class="comment">Expired Devices</div>
+                                                <div class="title">{{expireddevicescount}}</div>
 
                                             </div>
                                         </div>
-                                    </div>
                                 </div><!-- fin div2 col.md3-->
+                              </div>
                                 <div class="col-xs-12 col-sm-3 col-md-3">
                                     <div class="widget">
                                         <div class="widget-body">
@@ -163,8 +163,8 @@
                                                 <div class="widget-icon red pull-left">
                                                     <i class="glyphicon glyphicon-lock"></i>
                                                 </div>
-                                                <div class="comment">Close Devices</div>
-                                                <div class="title">0</div>
+                                                <div class="comment">Old Devices</div>
+                                                <div class="title">{{olddevicescount}}</div>
 
                                             </div>
                                         </div>
@@ -199,7 +199,6 @@
                                         <div class="widget-body">
                                             <div class="widget-content">
 
-                                                    <table class="table
                                                     <table class="table table-responsive">
                                                         <tbody>
                                                             <tr ng-repeat="message in messages | orderBy:'-_id'"><td>{{message.message + ' ' + message.message2}}</td><td><span ng-class="message.messagetype2"><i ng-class="message.messagetype3"></i></span></td></tr>
@@ -406,7 +405,7 @@
                                                 <div class="form-group">
                                                     <label for="date">Date Of Purchase:</label>
                                                     <p class="input-group">
-                                                        <input ng-model="device.datDatePurchase" type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                                      <input ng-model="device.datDatePurchase" type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
                                                         <span class="input-group-btn">
                                                             <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
                                                         </span>

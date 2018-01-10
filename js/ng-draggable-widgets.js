@@ -22,7 +22,6 @@ var hitZones = {
             (e.pageX > rect.left) &&
             (e.pageX < rect.right - (width / 2))) {
           placeholder.insertBefore(widget);
-          console.log(i);
           return {
             group: angular.element(widget).scope().dragGroup,
             index: i
@@ -33,7 +32,6 @@ var hitZones = {
             (e.pageX > rect.left + (width / 2)) &&
             (e.pageX < rect.right)) {
           placeholder.insertAfter(widget);
-          console.log(i+1);
           return {
             group: angular.element(widget).scope().dragGroup,
             index: i+1

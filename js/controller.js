@@ -2,9 +2,48 @@ angular.element(function() {
     angular.bootstrap(document, ['WarrantyModule']);
 });
 
-angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngTagsInput', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.select', 'ui.toggle', 'ng-draggable-widgets'])
+angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngTagsInput', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.select', 'ui.toggle'])
 
         .controller('ctrlWarrantyHome', ['$scope', '$http', '$loading', '$uibModal', 'FileUploader', function ($scope, $http, $loading, $uibModal, FileUploader) {
+            // Valores  por defecto del dashboard
+            $scope.protecteddevicescount = 0;
+            $scope.expireddevicescount = 0;
+            $scope.olddevicescount = 0;
+            Date.prototype.addDays = function(days) {
+              var dat = new Date(this.valueOf());
+              dat.setDate(dat.getDate() + days);
+              return dat;
+            }
+            // Cada vez que cambien los dispositivos cambia el dashboard count
+            $scope.$watch("devices",function(newValue,oldValue) {
+              if (typeof $scope.devices == 'undefined'){
+                return 0;
+              }
+              else{
+                if ($scope.devices.length == 0){
+                  return 0;
+                }
+              }
+              $scope.devices.forEach(function(element) {
+                element.datDatePurchase = new Date(element.datDatePurchase)
+              });
+              var today = new Date();
+              // Equipo cuya fecha de compra más fecha de expiración es mayor a hoy
+              var protecteddevices = $scope.devices.filter(function (el) {
+                return (((el.datDatePurchase.addDays(el.warrantytime.id * 365)) > today) && el.Status == 'Active')
+              })
+              $scope.protecteddevicescount = protecteddevices.length;
+              // Equipo cuya fecha de compra más fecha de expiración es menor a hoy
+              var expireddevices = $scope.devices.filter(function (el) {
+                return (((el.datDatePurchase.addDays(el.warrantytime.id * 365)) < today) && el.Status == 'Active')
+              })
+              $scope.expireddevicescount = expireddevices.length;
+              // Equipo que están desactivados
+              var olddevices = $scope.devices.filter(function (el) {
+                return (el.Status != 'Active')
+              })
+              $scope.olddevicescount = olddevices.length;
+            });
             // Base de data
             $scope.data = {};
             // Valores por defecto de modales
@@ -671,41 +710,6 @@ angular.module('WarrantyModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         }])
 
         .controller('ctrlWarrantyLogin', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
-
-          // Temp
-          var widgets = [
-            {
-              title:'Cats with Woks',
-              mas:true,
-              class: 'woks'
-            },
-            {
-              title:'Socks on Sticks',
-              mas:true,
-              class: 'socks'
-            },
-            {
-              title:'Mocks of Macs',
-              mas:false,
-              class: 'mocks'
-            },
-            {
-              title:'Pops in Pumps',
-              mas:false,
-              class: 'pops'
-            },
-            {
-              title:'Hocks of Rumps',
-              mas:true,
-              class: 'hocks'
-            }
-          ];
-          $scope.widgets = widgets;
-          $scope.moveWidget = function(drag) {
-            console.log('DALEEEEEEEEEEEEEEEEEEEEEEEEEEE');
-            console.log($scope.widgets);
-          }
-          // Fin Temp
 
             // Valores por defecto de modales
             $scope.MessagesModalInterface = {};
